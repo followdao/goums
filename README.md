@@ -3,6 +3,16 @@
 
 
 
+----
+
+[check out docs 查看文档](./docs/readme.md)
+
+----
+
+
+
+
+
 ## 0. movition 动机
 
 就是一个 go 练手项目, 同时, 也计划用于 goim 项目的辅助扩展, 使用 goim 的用户管理

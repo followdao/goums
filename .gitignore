@@ -1,5 +1,20 @@
-# Object file
-*.o
+# Build and Release Folders
+bin/
+bin-debug/
+bin-release/
+vender/
+.settings/
+node_modules/
+vod-ts-data/
+vod-test/
+.idea/
+client/
+dist/
+vendor/
+*.swf
+*.air
+*.ipa
+*.apk
 
-# Ada Library Information
-*.ali
+
+

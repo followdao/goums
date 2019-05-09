@@ -113,9 +113,14 @@ IDE 采用 vscode 或 jetbrains goland
 
 
 
-及
+及打开 go module 支持 ( 最新版本 goland 会自动提示并在确认后自动创建)
 
-![goland-setting-02](../../../../../../../Desktop/goland-setting-02.png)
+ ![goland-setting-02](assets/goland-setting-02-7406145.png)
+
+
+ 及打开所有 go 的语法检查项
+
+ ![goland-setting-03](assets/goland-setting-03.png)
 
 
 

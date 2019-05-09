@@ -6,7 +6,7 @@
 ## 0. movition 动机
 
 就是一个 go 练手项目, 同时, 也计划用于 goim 项目的辅助扩展, 使用 goim 的用户管理
-1. 手上有类似项目在进行
+1. 手上有类似用户管理项目在进行重构
 2. 受到 [https://github.com/developer-learning/reading-go/issues/348](https://github.com/developer-learning/reading-go/issues/348) 相关讨论启发
 3. 本项目, 申请为 [https://github.com/developer-learning/reading-go](https://github.com/developer-learning/reading-go) 练手项目
 

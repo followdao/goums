@@ -4,6 +4,12 @@
 
 ## 1. 开发环境设置
 
+### 1.0 正确配置 git / github 
+稍后补充, 网络上文章也不少, 可自行查看.
+注: github 是 github.com 的客户端
+
+![github-client](assets/github-client.png)
+
 ### 1.1 mac 开发环境配置
 
 下面只是 golang 的安装配置, 其他有关 brew 及 terminal 命令行相关配置, 稍后补充

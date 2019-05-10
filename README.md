@@ -1,5 +1,5 @@
-# go-ums
-一个 gin-goinc/gin 练手项目, 提供用户管理(user-management-subsystem) 如注册/认证/鉴权/授权
+# go-ums -- a golang based User Management Subsystem (UMS)
+~~一个 gin-goinc/gin 练手项目~~, 分布式 web 开源项目,  提供用户管理(user-management-subsystem) 如注册/认证/鉴权/授权
 
 
 
@@ -18,8 +18,8 @@
 就是一个 go 练手项目, 同时, 也计划用于 goim 项目的辅助扩展, 使用 goim 的用户管理
 1. 手上有类似用户管理项目在进行重构
 2. 受到 [https://github.com/developer-learning/reading-go/issues/348](https://github.com/developer-learning/reading-go/issues/348) 相关讨论启发
-3. 本项目, 申请为 [https://github.com/developer-learning/reading-go](https://github.com/developer-learning/reading-go) 练手项目
-
+3. ~~本项目, 申请为 [https://github.com/developer-learning/reading-go](https://github.com/developer-learning/reading-go) 练手项目~~
+4. **重点更新**: 受某项目进度变更影响, 本项目延迟支持 gin-gonic/gin( 原因: 不想采用 gin 的数据 binding 方式, 这是 gin 三大特点之一), 修改为 web 部分采用 fasthttp , 内部接口采用 gRPC.  同时, 本项目代码, 支持 gin-gonic/gin 非常容易( 业务代码对边缘同时支持 gRPC / web / RESTful / java, 所以, web部分可与任何 go web 组件结合)  , 如有咨询或交流, 请提 issues 
 
 ## 1. porject code layout 代码组织
 

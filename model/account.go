@@ -48,41 +48,56 @@ var Role_value = map[string]int32{
 
 // Account  account  define
 type Account struct {
-	ID          int64  // 全局唯一
-	Email       string // email length >=5
-	Password    string // password length >=6
-	Role        Role
-	Status      Status
-	CreatedAt   int64
-	UpdatedAt   int64
-	AccessToken string // accessToken length >=32
+	ID          int64  `json:"iD"`  // 全局唯一
+	Email       string `json:"email"` // email length >=5
+	Password    string `json:"password"` // password length >=6
+	Role        Role   `json:"role"`
+	Status      Status `json:"status"`
+	CreatedAt   int64  `json:"createdAt"`
+	UpdatedAt   int64  `json:"updatedAt"`
+	AccessToken string `json:"accessToken"` // accessToken length >=32
 }
 
-type OperationResult struct {
-	TransID   int64
-	Code      int    // code = 200, success;  code=500, error
-	Msg       string // return operation name when success,  return error message when error
-	TimeStamp int64
+// Account  account  define
+type AccountProfile struct {
+	ID          int64  `json:"iD"`  // 全局唯一
+	Email       string `json:"email"` // email length >=5
+	Role        Role   `json:"role"`
+	Status      Status `json:"status"`
+	CreatedAt   int64  `json:"createdAt"`
+	UpdatedAt   int64  `json:"updatedAt"`
+}
+
+type Result struct {
+	TransID   int64  `json:"transID"`
+	Code      int    `json:"code"`    // code = 200, success;  code=500, error`
+	Msg       string `json:"msg"` // return operation name when success,  return error message when error
+	TimeStamp int64  `json:"timeStamp"`
 }
 
 type ReqRegister struct {
-	TransID  int64
-	Email    string // email length >=5
-	Password string // password length >=6
+	TransID  int64  `json:"transID"`
+	Email    string `json:"email"` // email length >=5
+	Password string `json:"password"` // password length >=6
+}
+
+type AccountRequest struct {
+	Email    string `json:"email"` // email length >=5
+	Password string `json:"password"` // password length >=6
 }
 
 type RespRegister struct {
-	Result OperationResult
-	Data   Account
+	Result Result  `json:"result"`
+	Data   Account `json:"data"`
 }
 
 // AccountOperation account operation interface define
 type AccountOperation interface {
-	Register(email, password string) (account *Account, result error)
-	Exists(email string) (exists bool, result error)
-	Login(email, password string) (token string, result error)
-	Logout(token string) (result error)
-	AuthToken(token string) (pass bool, result error)
-	AuthUID(id int64) (pass bool, result error)
-	Verify(token string) (pass bool, result error)
+	Register(email, password string) (account *Account, err error)
+	Exists(email string) (exists bool, err error)
+	Login(email, password string) (token string, err error)
+	Logout(token string) (err error)
+	AuthToken(token string) (pass bool, err error)
+	AuthUID(id int64) (pass bool, err error)
+	Verify(token string) (pass bool, err error)
 }

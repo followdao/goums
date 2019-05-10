@@ -1,0 +1,87 @@
+syntax = "proto3";
+
+package account;
+import "github.com/gogo/protobuf/gogoproto/gogo.proto";
+option (gogoproto.testgen_all) = true;
+option (gogoproto.benchgen_all) = true;
+
+option (gogoproto.gostring_all) = true;
+option (gogoproto.equal_all) = true;
+option (gogoproto.verbose_equal_all) = true;
+// option (gogoproto.goproto_stringer_all) = false;
+// option (gogoproto.stringer_all) =  true;
+// option (gogoproto.populate_all) = true;
+//
+//option (gogoproto.marshaler_all) = true;
+//option (gogoproto.sizer_all) = true;
+//
+//option (gogoproto.unmarshaler_all) = true;
+//option (gogoproto.goproto_getters_all) = false;
+
+
+
+
+
+// Status account's status define
+enum Status {
+    None = 0;
+    WaitForEmailVerify = 1;
+    Active = 2;
+    Suspend = 4;
+    Deleted = 8;
+}
+
+// Role account's rols define
+enum Role {
+    Guest = 0;
+    Member = 1;
+    VIP = 2;
+}
+
+
+message Result {
+    int64 TransactionID = 1;
+    int32 Code = 2;
+    string Msg = 3;
+}
+
+message Account {
+    int64 ID = 1;
+    string email = 2;
+    Role Role = 3;
+    Status Status = 4;
+    int64 CreatedAt = 5;
+    int64 UpdatedAt = 6;
+}
+
+message AccountRequest {
+    string Email = 1;
+    string Password = 2;
+}
+
+message RegisterRequest {
+    int64 TransactionID = 1;
+    AccountRequest Account = 2;
+}
+
+message RegisterResponse {
+    Account Account = 1;
+    Result Result = 2;
+}
+
+message LoginRequest {
+    int64 TransactionID = 1;
+    AccountRequest Account = 2;
+}
+message LoginResponse {
+    string Token = 1;
+    Result Result = 2;
+}
+
+service BookmarksService {
+    rpc Register (RegisterRequest) returns (RegisterResponse) {
+    }
+    rpc Login (LoginRequest) returns (LoginResponse) {
+    }
+}
+

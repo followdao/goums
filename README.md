@@ -7,7 +7,7 @@
 > #### 1. design 设计文档
 >
 > 1. [模型设计 v0.1.0](./docs/design/model-design-cn.md) chinese 
-> 2. [go-ums v0.1.0 测试/编译/运行](./docs/build-test.md)
+> 2. [go-ums v0.1.0 测试/编译/运行](./docs/design/build-test.md)
 >
 > #### 2. dev guide 开发指南
 >

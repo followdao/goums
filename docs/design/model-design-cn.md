@@ -141,13 +141,13 @@ go-ums 的用户模型设计
 用户模型与操作的 golang 实现
 
  见 [https://github.com/tsingson/go-ums/blob/master/model/account.go]
- 
- 
+
+
  (说明省略)
 ### 3.2 接口设计
 
  见 [https://github.com/tsingson/go-ums/blob/master/model/account.go]
- 
+
 (说明省略)
 
 
@@ -158,7 +158,6 @@ go-ums 的用户模型设计
 
 (说明省略)
 
-
 ## 4. 测试/验证
 
 待续...
@@ -166,3 +165,7 @@ go-ums 的用户模型设计
 ## 5. 附注/参考
 
 持续...
+
+## 6. 作者与贡献者
+
+1. 项目发起人 tsingson 三明智 写于中国深圳 小罗号口琴音乐中心,  技术博客https://tsingson.github.io/ 2019/05/09

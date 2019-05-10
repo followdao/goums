@@ -7,4 +7,5 @@
 ## 2. dev guide 开发指南
 
 1. [golang 开发环境设置](./guide/dev-env-setup.md) chinese 
+2. [golang http 测试撰写](./guide/httptest.md) chinese
 

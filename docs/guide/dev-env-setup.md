@@ -131,3 +131,7 @@ IDE 采用 vscode 或 jetbrains goland
 
 
 ## 3. 待续....
+
+## 4. 作者与贡献者
+
+1. 项目发起人 tsingson 三明智 写于中国深圳 小罗号口琴音乐中心,  技术博客https://tsingson.github.io/ 2019/05/09

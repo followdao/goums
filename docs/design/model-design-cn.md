@@ -140,37 +140,23 @@ go-ums 的用户模型设计
 ### 3.1 模型设计
 用户模型与操作的 golang 实现
 
-```
-// Account  account  define
-type Account struct {
-	ID          int64  // 全局唯一
-	Email       string // email length >=5
-	Password    string // password length >=6
-	CreateAt    int64
-	AccessToken string // accessToken length >=32
-}
-
-type OperationResult struct {
-	Code int    // code = 200, success;  code=500, error
-	Msg  string // return operation name when success,  return error message when error
-}
-
-// AccountOperation account operation interface define
-type AccountOperation interface {
-	Register(email, password string) (account *Account, result OperationResult)
-	Exists(email string) (exists bool, result OperationResult)
-	Login(email, password string) (token string, result OperationResult)
-	Logout(token string) (result OperationResult)
-	Auth(token string) (pass bool, result OperationResult)
-	Verify(token string) (pass bool, result OperationResult)
-}
-```
+ 见 [https://github.com/tsingson/go-ums/blob/master/model/account.go]
+ 
+ 
+ (说明省略)
 ### 3.2 接口设计
-(省略)
+
+ 见 [https://github.com/tsingson/go-ums/blob/master/model/account.go]
+ 
+(说明省略)
 
 
 ### 3.3 业务逻辑实现
-(省略)
+
+见 [https://github.com/tsingson/go-ums/blob/master/pkg/services/account.go](https://github.com/tsingson/go-ums/blob/master/pkg/services/account.go)
+
+
+(说明省略)
 
 
 ## 4. 测试/验证

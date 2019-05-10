@@ -110,6 +110,8 @@ cd /Users/qinshen/go/bin
 
 注1: 
  http client 测试代码完全一样, 服务器端业务逻辑代码完全一样
+ 
+ 
 注2:
  这可能是偶然现象, 哈
  

@@ -3,7 +3,16 @@
 
 ----
 
-[check out docs 查看文档](./docs/readme.md)
+> ### [check out docs 查看文档](./docs/readme.md)
+> #### 1. design 设计文档
+>
+> 1. [模型设计 v0.1.0](./docs/design/model-design-cn.md) chinese 
+> 2. [go-ums v0.1.0 测试/编译/运行](./docs/build-test.md)
+>
+> #### 2. dev guide 开发指南
+>
+> 1. [golang 开发环境设置](./docs/guide/dev-env-setup.md) chinese 
+> 2. [golang http 测试撰写](./docs/guide/httptest.md) chinese
 
 ----
 
@@ -17,7 +26,8 @@
 1. 手上有类似用户管理项目在进行重构
 2. 受到 [https://github.com/developer-learning/reading-go/issues/348](https://github.com/developer-learning/reading-go/issues/348) 相关讨论启发
 3. ~~本项目, 申请为 [https://github.com/developer-learning/reading-go](https://github.com/developer-learning/reading-go) 练手项目~~
-4. **重点更新**: 受某项目进度变更影响, 本项目延迟支持 gin-gonic/gin( 原因: 不想采用 gin 的数据 binding 方式, 这是 gin 三大特点之一), 修改为 web 部分采用 fasthttp , 内部接口采用 gRPC.  同时, 本项目代码, 支持 gin-gonic/gin 非常容易( 业务代码对边缘同时支持 gRPC / web / RESTful / java, 所以, web部分可与任何 go web 组件结合)  , 如有咨询或交流, 请提 issues 
+4. **重点更新1**: 受某项目进度变更影响, 本项目延迟支持 gin-gonic/gin( 原因: 不想采用 gin 的数据 binding 方式, 这是 gin 三大特点之一), 修改为 web 部分采用 fasthttp , 内部接口采用 gRPC.  同时, 本项目代码, 支持 gin-gonic/gin 非常容易( 业务代码对边缘同时支持 gRPC / web / RESTful / java, 所以, web部分可与任何 go web 组件结合)  , 如有咨询或交流, 请提 issues 
+5. **重点更新2**: 项目中使用的开源库, 除 gRPC / websocket 相关部分以外, 小部分可能与 go 标准库并不兼容, 但核心业务功能尽量使用"标准"库或与"标准"兼容库
 
 ## 1. porject code layout 代码组织
 

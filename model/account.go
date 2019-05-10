@@ -48,8 +48,8 @@ var Role_value = map[string]int32{
 
 // Account  account  define
 type Account struct {
-	ID          int64  `json:"iD"`  // 全局唯一
-	Email       string `json:"email"` // email length >=5
+	ID          int64  `json:"iD"`       // 全局唯一
+	Email       string `json:"email"`    // email length >=5
 	Password    string `json:"password"` // password length >=6
 	Role        Role   `json:"role"`
 	Status      Status `json:"status"`
@@ -60,29 +60,29 @@ type Account struct {
 
 // Account  account  define
 type AccountProfile struct {
-	ID          int64  `json:"iD"`  // 全局唯一
-	Email       string `json:"email"` // email length >=5
-	Role        Role   `json:"role"`
-	Status      Status `json:"status"`
-	CreatedAt   int64  `json:"createdAt"`
-	UpdatedAt   int64  `json:"updatedAt"`
+	ID        int64  `json:"iD"`    // 全局唯一
+	Email     string `json:"email"` // email length >=5
+	Role      Role   `json:"role"`
+	Status    Status `json:"status"`
+	CreatedAt int64  `json:"createdAt"`
+	UpdatedAt int64  `json:"updatedAt"`
 }
 
 type Result struct {
 	TransID   int64  `json:"transID"`
-	Code      int    `json:"code"`    // code = 200, success;  code=500, error`
-	Msg       string `json:"msg"` // return operation name when success,  return error message when error
+	Code      int    `json:"code"` // code = 200, success;  code=500, error`
+	Msg       string `json:"msg"`  // return operation name when success,  return error message when error
 	TimeStamp int64  `json:"timeStamp"`
 }
 
 type ReqRegister struct {
 	TransID  int64  `json:"transID"`
-	Email    string `json:"email"` // email length >=5
+	Email    string `json:"email"`    // email length >=5
 	Password string `json:"password"` // password length >=6
 }
 
 type AccountRequest struct {
-	Email    string `json:"email"` // email length >=5
+	Email    string `json:"email"`    // email length >=5
 	Password string `json:"password"` // password length >=6
 }
 

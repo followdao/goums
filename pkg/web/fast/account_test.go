@@ -29,7 +29,6 @@ func TestHttpSERV_RegisterHandler(t *testing.T) {
 	var err error
 	var r *router.Router
 	{
-
 		r = router.New()
 		r.POST("/register", hs.RegisterHandler)
 	}

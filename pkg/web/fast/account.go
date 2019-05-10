@@ -27,15 +27,15 @@ func (hs *HttpServer) RegisterHandler(ctx *fasthttp.RequestCtx) {
 	var err error
 
 	// verify token
-	{
-		token := ctx.Request.Header.Peek("token")
-		err = verify(token)
-		if err != nil {
-			msg := error.Error(err)
-			ctx.Error(msg, fasthttp.StatusInternalServerError)
-			return
-		}
-	}
+	// {
+	// 	token := ctx.Request.Header.Peek("token")
+	// 	err = verify(token)
+	// 	if err != nil {
+	// 		msg := error.Error(err)
+	// 		ctx.Error(msg, fasthttp.StatusInternalServerError)
+	// 		return
+	// 	}
+	// }
 	// handle payload
 	{
 		payload := ctx.PostBody()

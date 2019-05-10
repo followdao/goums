@@ -93,24 +93,17 @@ func TestHttpServer_RegisterHandler(t *testing.T) {
 
 }
 
-
-
 func BenchmarkHttpServer_RegisterHandler(b *testing.B) {
 	var err error
 
-
 	// defer ln.Close()
 
-	c := &fasthttp.Client{
-
-	}
+	c := &fasthttp.Client{}
 	req, resp := fasthttp.AcquireRequest(), fasthttp.AcquireResponse()
 	defer func() {
 		fasthttp.ReleaseRequest(req)
 		fasthttp.ReleaseResponse(resp)
 	}()
-
-
 
 	req.SetRequestURI("http://localhost:3001/register")
 

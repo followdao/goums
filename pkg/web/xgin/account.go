@@ -48,7 +48,8 @@ func (hs *HttpServer) RegisterHandler(c *gin.Context) {
 func (hs *HttpServer) SetupRouter() *gin.Engine {
 	// Disable Console Color
 	// gin.DisableConsoleColor()
-	r := gin.Default()
+	gin.SetMode(gin.ReleaseMode)
+	r := gin.New()
 
 	r.POST("/register", hs.RegisterHandler)
 	return r

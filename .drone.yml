@@ -1,4 +1,10 @@
 pipeline:
+  kind: pipeline
+  name: linux-arm64
+
+  platform:
+    os: linux
+    arch: arm64
   build:
     image: golang:1.12.5
     commands:

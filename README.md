@@ -1,7 +1,5 @@
 # go-ums -- a golang based User Management Subsystem (UMS)
-~~一个 gin-goinc/gin 练手项目~~, 分布式 web 开源项目,  提供用户管理(user-management-subsystem) 如注册/认证/鉴权/授权
-
-
+~~一个 gin-goinc/gin 练手项目~~, 分布式 web 开源项目, 核心由 golang 开发,  提供用户管理(user-management-subsystem) / AAA 认证/鉴权/授 / 多业务会话共享与管理等, 以支持分布式部署及云部署为主要目标
 
 ----
 

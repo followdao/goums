@@ -19,33 +19,37 @@ func New() *AccountStore {
 }
 
 // Register account register
-func (as *AccountStore) Register(email, password string) (account *model.Account, result model.OperationResult) {
+func (as *AccountStore) Register(email, password string) (account *model.Account, result error) {
+	account = &model.Account{
+		Email:    email,
+		Password: password,
+	}
 	return
 }
 
 // Exists check account is duplicated or not
-func (as *AccountStore) Exists(email string) (exists bool, result model.OperationResult) {
+func (as *AccountStore) Exists(email string) (exists bool, result error) {
 	return
 }
 
 // Login account login
-func (as *AccountStore) Login(email, password string) (token string, result model.OperationResult) {
+func (as *AccountStore) Login(email, password string) (token string, result error) {
 	return
 }
 
 // Logout  account logout
-func (as *AccountStore) Logout(token string) (result model.OperationResult) {
+func (as *AccountStore) Logout(token string) (result error) {
 	return
 
 }
 
 // Auth account auth
-func (as *AccountStore) Auth(token string) (pass bool, result model.OperationResult) {
+func (as *AccountStore) Auth(token string) (pass bool, result error) {
 	return
 }
 
 // Verify account's access token versify
-func (as *AccountStore) Verify(token string) (pass bool, result model.OperationResult) {
+func (as *AccountStore) Verify(token string) (pass bool, result error) {
 	return
 }
 

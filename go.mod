@@ -12,6 +12,8 @@ require (
 	github.com/klauspost/cpuid v1.2.1 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.1 // indirect
+	github.com/oklog/run v1.0.0
+	github.com/sanity-io/litter v1.1.0
 	github.com/stretchr/testify v1.3.0
 	github.com/tsingson/goutils v0.0.0-20190504180123-5f8d39ecfa2f
 	github.com/valyala/fasthttp v1.2.0

@@ -10,20 +10,20 @@ import (
 	"github.com/tsingson/go-ums/pkg/services"
 )
 
-type httpServer struct {
+type HttpServer struct {
 	as *services.AccountStore
 }
 
 // var once sync.Once
 
-func NewHttpServer() *httpServer {
+func NewHttpServer() *HttpServer {
 	as := services.New()
-	return &httpServer{
+	return &HttpServer{
 		as: as,
 	}
 }
 
-func (hs *httpServer) RegisterHandler(ctx *fasthttp.RequestCtx) {
+func (hs *HttpServer) RegisterHandler(ctx *fasthttp.RequestCtx) {
 	var err error
 
 	// verify token
@@ -79,7 +79,7 @@ func (hs *httpServer) RegisterHandler(ctx *fasthttp.RequestCtx) {
 	return
 }
 
-func (hs *httpServer) LoginHandler(ctx *fasthttp.RequestCtx) {
+func (hs *HttpServer) LoginHandler(ctx *fasthttp.RequestCtx) {
 	var err error
 
 	// handle payload

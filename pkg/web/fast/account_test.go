@@ -18,7 +18,7 @@ import (
 	"github.com/tsingson/go-ums/model"
 )
 
-var hs *httpServer
+var hs *HttpServer
 
 func TestMain(m *testing.M) {
 	hs = NewHttpServer()

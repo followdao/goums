@@ -32,7 +32,7 @@ func (as *AccountStore) Register(email, password string) (account *model.Account
 
 	// check parameter
 	{
-
+		// TODO: verify parameter
 	}
 
 	// check email is duplicated or noet
@@ -59,6 +59,7 @@ func (as *AccountStore) Register(email, password string) (account *model.Account
 		as.total++
 		as.lock.Unlock()
 	}
+	account.Password = ""
 	return
 }
 

@@ -44,7 +44,7 @@ func BenchmarkAccountStore_Register(b *testing.B) {
 
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		_, _ = as.Register(test.email, test.password)
+		_, _ = as.Register(strBuilder(test.email, strconv.Itoa(i)), strBuilder(test.password, strconv.Itoa(i)))
 	}
 }
 

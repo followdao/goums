@@ -11,6 +11,7 @@ import (
 	"github.com/valyala/fasthttp"
 
 	"github.com/tsingson/go-ums/model"
+	"github.com/tsingson/go-ums/pkg/services"
 )
 
 func postRegister(url, email, password string) (err error) {
@@ -33,6 +34,8 @@ func postRegister(url, email, password string) (err error) {
 		Email:    email,
 		Password: password,
 	}
+	transactionID := services.GenerateIDString()
+
 	fmt.Println("-------------------> http request object ")
 	litter.Dump(register)
 
@@ -43,6 +46,7 @@ func postRegister(url, email, password string) (err error) {
 	}
 
 	req.Header.SetMethod("POST")
+	req.Header.Set("transactionID", transactionID)
 	req.SetBody(body)
 
 	var timeOut = time.Duration(5 * time.Second)

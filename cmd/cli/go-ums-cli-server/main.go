@@ -14,8 +14,11 @@ import (
 const (
 	// ServerName  apk name
 	ServerName     = "account service"
+	// Version  version of current program
 	Version        = "0.1.0"
+	// MaxHTTPConnect max connect limit of fast http
 	MaxHTTPConnect = 30000
+	// BufferSize buffer size of fast http  in http payload
 	BufferSize     = 1024 * 4
 )
 

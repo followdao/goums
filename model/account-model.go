@@ -1,24 +1,26 @@
 package model
 
+// Status account status like active / suspend / deleted
 type Status int32
 
 const (
-	Status_None               Status = 0
-	Status_WaitForEmailVerify Status = 1
-	Status_Active             Status = 2
-	Status_Suspend            Status = 4
-	Status_Deleted            Status = 8
+	StatusNone               Status = 0
+	StatusWaitForEmailVerify Status = 1
+	StatusActive             Status = 2
+	StatusSuspend            Status = 4
+	StatusDeleted            Status = 8
 )
 
-var Status_name = map[int32]string{
+// StatusName status name map
+var StatusName = map[int32]string{
 	0: "None",
 	1: "WaitForEmailVerify",
 	2: "Active",
 	4: "Suspend",
 	8: "Deleted",
 }
-
-var Status_value = map[string]int32{
+// StatusValue  statue value map
+var StatusValue = map[string]int32{
 	"None":               0,
 	"WaitForEmailVerify": 1,
 	"Active":             2,
@@ -26,6 +28,7 @@ var Status_value = map[string]int32{
 	"Deleted":            8,
 }
 
+// Role role of account for access control
 type Role int32
 
 const (
@@ -34,13 +37,14 @@ const (
 	Role_VIP    Role = 2
 )
 
-var Role_name = map[int32]string{
+// RoleName role name map
+var RoleName = map[int32]string{
 	0: "Guest",
 	1: "Member",
 	2: "VIP",
 }
-
-var Role_value = map[string]int32{
+// RoleValue role value map
+var RoleValue = map[string]int32{
 	"Guest":  0,
 	"Member": 1,
 	"VIP":    2,

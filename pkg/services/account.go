@@ -47,7 +47,7 @@ func (as *AccountStore) Register(email, password string) (account *model.Account
 		Email:     email,
 		Password:  password,
 		Role:      model.Role_Guest,
-		Status:    model.Status_WaitForEmailVerify,
+		Status:    model.StatusWaitForEmailVerify,
 		CreatedAt: timeNow(),
 		UpdatedAt: timeNow(),
 	}

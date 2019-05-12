@@ -4,6 +4,7 @@
 
 ![self](./assets/self.jpg)
 
+
 ## 0. go-ums 是什么
 
 go-ums 开发目标是一个开源项目, 核心由 golang 开发,  提供用户管理(user-management-subsystem) / AAA 认证/鉴权/授 / 多业务会话共享与管理等, 以支持分布式部署及云部署为主要目标
@@ -245,7 +246,7 @@ go-ums 开发目标是一个开源项目, 核心由 golang 开发,  提供用户
 >	   - PUT：更新（Update）
 >	   - PATCH：更新（Update），通常是部分更新
 >	   - DELETE：删除（Delete）
->	3. 数据一般是  "application/json; charset=utf-8” 标的 JSON 格式
+>	3. 数据编码(序列化/反序列化) 是  "application/json; charset=utf-8” 标的 JSON 格式
 >	
 >	4. 少量操作关联数据, 可以在 HTTP header 中传递, 比如 transactionID/ token / cookie , 这些关联数据, 一般用来协助状态跟踪
 
@@ -377,25 +378,40 @@ client ( 多个)  <---->  gateWay( HA, 热备, 路由,分流)  <-----> AAA (多�
 2. 检查 email 有重复, 操作失败
 3. 其他异常( 略)
 
-
+见 /pkg/service 下测试代码
 
  
 
 ### 4.3  LIT ( local integration test) 网元集成测试
 
+见  /pkg/web 下各测试代码
+
+
+### 4.4  SIT ( system intergration test ) 系统集成测试
+
+见 /cmd/cli 下代码
+
+稍后补充..........
+
+### 4.5 编译/部署/运维
 
 参见  [go-ums v0.1.0 测试/编译/运行](./build-test.md)
 
-### 4.4  SIT ( system intergration test ) 系统集成测试
-省略..........
+稍后补充.............
+
 
 ## 5. 性能测试/部署测试/  trial 验证
 
 省略 ...
 
 ## 6. 附注/参考
+ 
 
-持续...
+### 6.1 接口设计相关参考
+* [RESTful API 最佳实践 http://www.ruanyifeng.com/blog/2018/10/restful-api-best-practices.html](http://www.ruanyifeng.com/blog/2018/10/restful-api-best-practices.html) -- [作者:阮一峰](http://www.ruanyifeng.com/home.html)
+
+_
+
 
 _
 

@@ -1,6 +1,6 @@
 package model
 
-// Account  account  define
+// AccountProfile  account  define
 type AccountProfile struct {
 	ID        int64  `json:"iD"`    // 全局唯一
 	Email     string `json:"email"` // email length >=5

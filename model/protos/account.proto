@@ -18,10 +18,6 @@ option (gogoproto.verbose_equal_all) = true;
 //option (gogoproto.unmarshaler_all) = true;
 //option (gogoproto.goproto_getters_all) = false;
 
-
-
-
-
 // Status account's status define
 enum Status {
     None = 0;

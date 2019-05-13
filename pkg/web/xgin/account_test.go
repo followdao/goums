@@ -18,11 +18,11 @@ import (
 	"github.com/tsingson/go-ums/model"
 )
 
-var hs *HttpServer
+var hs *HTTPServer
 
 func TestMain(m *testing.M) {
 	gin.SetMode(gin.ReleaseMode)
-	hs = NewHttpServer()
+	hs = NewHTTPServer()
 	r := hs.SetupRouter()
 
 	server := http.Server{

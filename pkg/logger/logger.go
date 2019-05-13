@@ -1,5 +1,6 @@
 package logger
 
+// Logger interface for logger
 type Logger interface {
 	Fatalf(string, ...interface{})
 	Debugf(string, ...interface{})

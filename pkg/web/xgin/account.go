@@ -9,20 +9,21 @@ import (
 	"github.com/tsingson/go-ums/pkg/services"
 )
 
-type HttpServer struct {
+// HTTPServer  define http server
+type HTTPServer struct {
 	as *services.AccountStore
 }
 
-// var once sync.Once
-
-func NewHttpServer() *HttpServer {
+// NewHTTPServer  initial http server
+func NewHTTPServer() *HTTPServer {
 	as := services.New()
-	return &HttpServer{
+	return &HTTPServer{
 		as: as,
 	}
 }
 
-func (hs *HttpServer) RegisterHandler(c *gin.Context) {
+// RegisterHandler register handler
+func (hs *HTTPServer) RegisterHandler(c *gin.Context) {
 	var err error
 
 	var reqObj = model.AccountRequest{}
@@ -44,7 +45,8 @@ func (hs *HttpServer) RegisterHandler(c *gin.Context) {
 
 }
 
-func (hs *HttpServer) SetupRouter() *gin.Engine {
+// SetupRouter setup router
+func (hs *HTTPServer) SetupRouter() *gin.Engine {
 	// Disable Console Color
 	// gin.DisableConsoleColor()
 	gin.SetMode(gin.ReleaseMode)

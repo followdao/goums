@@ -10,6 +10,7 @@ import (
 	"github.com/tsingson/go-ums/model"
 )
 
+// AccountStore   storage of account
 type AccountStore struct {
 	total           int
 	accountListMail cmap.ConcurrentMap
@@ -44,7 +45,7 @@ func (as *AccountStore) Register(email, password string) (account *model.Account
 		ID:        uid,
 		Email:     email,
 		Password:  password,
-		Role:      model.Role_Guest,
+		Role:      model.RoleGuest,
 		Status:    model.StatusWaitForEmailVerify,
 		CreatedAt: timeNow(),
 		UpdatedAt: timeNow(),
@@ -58,6 +59,7 @@ func (as *AccountStore) Register(email, password string) (account *model.Account
 	return
 }
 
+// UpsetEmail  update or insert account profile via email
 func (as *AccountStore) UpsetEmail(ac *model.Account) {
 	cb := func(exists bool, valueInMap interface{}, newValue interface{}) interface{} {
 		nv := newValue.(*model.Account)
@@ -121,7 +123,7 @@ func (as *AccountStore) Logout(token string) (err error) {
 	return
 }
 
-// Auth account auth
+// AuthToken account auth
 func (as *AccountStore) AuthToken(token string) (pass bool, err error) {
 	return true, nil
 }

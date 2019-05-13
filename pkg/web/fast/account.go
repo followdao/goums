@@ -12,20 +12,21 @@ import (
 	"github.com/tsingson/go-ums/pkg/services"
 )
 
-type HttpServer struct {
+// HTTPServer
+type HTTPServer struct {
 	as *services.AccountStore
 }
 
-// var once sync.Once
-
-func NewHttpServer() *HttpServer {
+// NewHTTPServer  initial a new HTTP server
+func NewHTTPServer() *HTTPServer {
 	as := services.New()
-	return &HttpServer{
+	return &HTTPServer{
 		as: as,
 	}
 }
 
-func (hs *HttpServer) RegisterHandler(ctx *fasthttp.RequestCtx) {
+// REgisterHandler  register handler
+func (hs *HTTPServer) RegisterHandler(ctx *fasthttp.RequestCtx) {
 	var err error
 
 	// verify token
@@ -78,7 +79,8 @@ func (hs *HttpServer) RegisterHandler(ctx *fasthttp.RequestCtx) {
 
 }
 
-func (hs *HttpServer) LoginHandler(ctx *fasthttp.RequestCtx) {
+// LoginHandler login handler
+func (hs *HTTPServer) LoginHandler(ctx *fasthttp.RequestCtx) {
 	var err error
 	transactionID := ctx.Request.Header.Peek("transactionID")
 	// handle payload
@@ -113,6 +115,7 @@ func (hs *HttpServer) LoginHandler(ctx *fasthttp.RequestCtx) {
 
 }
 
+// guild fastHTTP error result
 func errorResult(ctx *fasthttp.RequestCtx, tid []byte, err error) {
 	var result = model.Result{}
 	result.Code = 500

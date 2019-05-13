@@ -4,11 +4,16 @@ package model
 type Status int32
 
 const (
-	StatusNone               Status = 0
+	// StatusNone default status is none
+	StatusNone Status = 0
+	// StatusWaitForEmailVerify  registered  and wait for email verify
 	StatusWaitForEmailVerify Status = 1
-	StatusActive             Status = 2
-	StatusSuspend            Status = 4
-	StatusDeleted            Status = 8
+	// StatusActive  register success and active , as a active member role
+	StatusActive Status = 2
+	// StatusSuspend  register suess and suspend status , meaning can't use any feature
+	StatusSuspend Status = 4
+	// StatusDeleted  meaning this member been deleted, disable any access
+	StatusDeleted Status = 8
 )
 
 // StatusName status name map
@@ -33,9 +38,12 @@ var StatusValue = map[string]int32{
 type Role int32
 
 const (
-	Role_Guest  Role = 0
-	Role_Member Role = 1
-	Role_VIP    Role = 2
+	// RoleGuest member's role as guest , limit to use feature
+	RoleGuest Role = 0
+	// RoleMember member's role as normal
+	RoleMember Role = 1
+	// RoleVIP members role as VIP
+	RoleVIP Role = 2
 )
 
 // RoleName role name map

@@ -11,7 +11,7 @@ import (
 
 func main() {
 
-	hs := xgin.NewHttpServer()
+	hs := xgin.NewHTTPServer()
 	r := hs.SetupRouter()
 	// Listen and Server in 0.0.0.0:8080
 	server := http.Server{

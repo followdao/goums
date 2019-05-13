@@ -19,10 +19,10 @@ import (
 	"github.com/tsingson/go-ums/model"
 )
 
-var hs *HttpServer
+var hs *HTTPServer
 
 func TestMain(m *testing.M) {
-	hs = NewHttpServer()
+	hs = NewHTTPServer()
 	os.Exit(m.Run())
 }
 

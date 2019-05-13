@@ -1,4 +1,4 @@
-![self](./docs/assets/self.jpg)
+
 
 [![Build Status](https://cloud.drone.io/api/badges/tsingson/go-ums/status.svg)](https://cloud.drone.io/tsingson/go-ums)
 

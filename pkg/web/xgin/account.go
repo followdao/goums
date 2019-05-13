@@ -42,7 +42,6 @@ func (hs *HttpServer) RegisterHandler(c *gin.Context) {
 
 	c.JSON(http.StatusOK, ac)
 
-	return
 }
 
 func (hs *HttpServer) SetupRouter() *gin.Engine {

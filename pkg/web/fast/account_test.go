@@ -9,6 +9,7 @@ import (
 	"time"
 
 	json "github.com/json-iterator/go"
+	"github.com/oklog/run"
 	"github.com/stretchr/testify/assert"
 
 	"github.com/fasthttp/router"
@@ -37,13 +38,16 @@ func TestHttpSERV_RegisterHandler(t *testing.T) {
 	s := &fasthttp.Server{
 		Handler: r.Handler,
 	}
-	serverStopCh := make(chan struct{})
-	go func() {
-		if err = s.Serve(ln); err != nil {
-			t.Fatalf("unexpected error: %s", err)
-		}
-		close(serverStopCh)
-	}()
+
+	var g run.Group
+	g.Add(func() error {
+		return s.Serve(ln)
+	}, func(e error) {
+		_ = s.Shutdown()
+	})
+
+	err = g.Run()
+	assert.NoError(t, err)
 
 	// defer ln.Close()
 
@@ -82,10 +86,7 @@ func TestHttpSERV_RegisterHandler(t *testing.T) {
 			Password: test.password,
 		}
 
-		body, err = json.Marshal(register)
-		if err != nil {
-
-		}
+		body, _ = json.Marshal(register)
 
 		req.Header.SetMethod("POST")
 		req.SetBody(body)
@@ -118,13 +119,16 @@ func BenchmarkHttpServer_RegisterHandler(b *testing.B) {
 	s := &fasthttp.Server{
 		Handler: r.Handler,
 	}
-	serverStopCh := make(chan struct{})
-	go func() {
-		if err = s.Serve(ln); err != nil {
-			b.Fatalf("unexpected error: %s", err)
-		}
-		close(serverStopCh)
-	}()
+
+	var g run.Group
+	g.Add(func() error {
+		return s.Serve(ln)
+	}, func(e error) {
+		_ = s.Shutdown()
+	})
+
+	err = g.Run()
+	assert.NoError(b, err)
 
 	// defer ln.Close()
 
@@ -162,10 +166,7 @@ func BenchmarkHttpServer_RegisterHandler(b *testing.B) {
 			Password: strBuilder(test.password, strconv.Itoa(i)),
 		}
 
-		body, err = json.Marshal(register)
-		if err != nil {
-
-		}
+		body, _ = json.Marshal(register)
 
 		req.Header.SetMethod("POST")
 		req.SetBody(body)

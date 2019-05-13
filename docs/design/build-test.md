@@ -33,6 +33,8 @@ ok  	github.com/tsingson/go-ums/pkg/services	10.419s
 
 ```
 
+
+
 测试 web
 ```
 cd /Users/qinshen/go/src/github.com/tsingson/go-ums/pkg/web/fast
@@ -110,12 +112,13 @@ cd /Users/qinshen/go/bin
 
 注1: 
  http client 测试代码完全一样, 服务器端业务逻辑代码完全一样
- 
- 
+
+
 注2:
  这可能是偶然现象, 哈
- 
+
 ### 4.1 fasthttp
+map
 ```
 /Users/qinshen/go/src/github.com/tsingson/go-ums/pkg/web/fast $  go test -bench .
 goos: darwin
@@ -125,7 +128,23 @@ BenchmarkHttpServer_RegisterHandler-8   	  100000	     19241 ns/op
 PASS
 ok  	github.com/tsingson/go-ums/pkg/web/fast	2.140s
 ```
+
+orcaman/concurrent-map
+
+```
+/Users/qinshen/go/src/github.com/tsingson/go-ums/pkg/web $  cd fast/
+/Users/qinshen/go/src/github.com/tsingson/go-ums/pkg/web/fast $   go test -bench .
+
+goos: darwin
+goarch: amd64
+pkg: github.com/tsingson/go-ums/pkg/web/fast
+BenchmarkHttpServer_RegisterHandler-8   	  100000	     17584 ns/op
+PASS
+ok  	github.com/tsingson/go-ums/pkg/web/fast	1.972s
+```
 ### 4.2 gin-gonic/gin 
+
+map 
 ```
 /Users/qinshen/go/src/github.com/tsingson/go-ums/pkg/web/xgin $  go test -bench .
 goos: darwin
@@ -135,3 +154,15 @@ BenchmarkHttpServer_RegisterHandler-8   	   10000	    104056 ns/op
 PASS
 ok  	github.com/tsingson/go-ums/pkg/web/xgin	1.076s
 ```
+
+orcaman/concurrent-map
+```
+/Users/qinshen/go/src/github.com/tsingson/go-ums/pkg/web/xgin $  go test -bench .
+goos: darwin
+goarch: amd64
+pkg: github.com/tsingson/go-ums/pkg/web/xgin
+BenchmarkHttpServer_RegisterHandler-8   	   10000	    111213 ns/op
+PASS
+ok  	github.com/tsingson/go-ums/pkg/web/xgin	1.148s
+```
+

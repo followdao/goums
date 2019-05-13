@@ -2,27 +2,24 @@ package services
 
 import (
 	"strings"
-	"sync"
 	"time"
 
+	"github.com/orcaman/concurrent-map"
 	"golang.org/x/xerrors"
 
 	"github.com/tsingson/go-ums/model"
 )
 
 type AccountStore struct {
-	lock            sync.Mutex
 	total           int
-	accountList     map[int64]*model.Account
-	accountListMail map[string]*model.Account
+	accountListMail cmap.ConcurrentMap
 }
 
 // New initial a AccountStore
 func New() *AccountStore {
-	accountList := make(map[int64]*model.Account, 0)
-	accountListMail := make(map[string]*model.Account, 0)
+	accountListMail := cmap.New()
 	return &AccountStore{
-		accountList:     accountList,
+		// accountList:     accountList,
 		accountListMail: accountListMail,
 	}
 }
@@ -36,12 +33,13 @@ func (as *AccountStore) Register(email, password string) (account *model.Account
 	}
 
 	// check email is duplicated or noet
-	ok, _ := as.Exists(email)
+
+	ok := as.Exists(email)
 	if ok {
 		return nil, ErrDuplicated
 	}
 	// add to store
-	uid := generateID()
+	uid := GenerateID()
 	account = &model.Account{
 		ID:        uid,
 		Email:     email,
@@ -53,28 +51,35 @@ func (as *AccountStore) Register(email, password string) (account *model.Account
 	}
 	// update account profile
 	{
-		as.lock.Lock()
-		as.accountList[uid] = account
-		as.accountListMail[email] = account
+		as.UpsetEmail(account)
 		as.total++
-		as.lock.Unlock()
 	}
 	account.Password = ""
 	return
 }
 
+func (as *AccountStore) UpsetEmail(ac *model.Account) {
+	cb := func(exists bool, valueInMap interface{}, newValue interface{}) interface{} {
+		nv := newValue.(*model.Account)
+		if !exists {
+			return []*model.Account{nv}
+		}
+		res := valueInMap.([]*model.Account)
+		return append(res, nv)
+	}
+	as.accountListMail.Upsert(ac.Email, ac, cb)
+
+}
+
 // Exists check account is duplicated or not
-func (as *AccountStore) Exists(email string) (exists bool, err error) {
+func (as *AccountStore) Exists(email string) bool {
 	// check parameter
 	{
 
 	}
 	//
-	_, ok := as.accountListMail[email]
-	if ok {
-		return true, nil
-	}
-	return false, xerrors.New("account not exist via email")
+	return as.accountListMail.Has(email)
+
 }
 
 // Login account login
@@ -85,27 +90,26 @@ func (as *AccountStore) Login(email, password string) (token string, err error) 
 	}
 
 	// check email is duplicated or noet
-	ok, _ := as.Exists(email)
-	if !ok {
+	ok := as.Exists(email)
+	if ok {
 		err = ErrAccountMissing
-		return
+		return "", err
 	}
 
 	// generate token and update account
-	ac := as.accountListMail[email]
+	v, _ := as.accountListMail.Get(email)
+	ac := v.(*model.Account)
 	if strings.EqualFold(ac.Password, password) {
-		token = generateToken()
+		token = GenerateToken()
 		ac.AccessToken = token
 		ac.UpdatedAt = timeNow()
 		// update account
 		{
-			as.lock.Lock()
-			as.accountListMail[email] = ac
-			as.accountList[ac.ID] = ac
-			as.lock.Unlock()
+			as.UpsetEmail(ac)
+			as.total++
 		}
-
-		return
+		err = nil
+		return token, err
 	}
 	err = xerrors.New("wrong password")
 	return
@@ -122,31 +126,9 @@ func (as *AccountStore) AuthToken(token string) (pass bool, err error) {
 	return true, nil
 }
 
-func (as *AccountStore) AuthUID(id int64) (pass bool, err error) {
-	// check parameter
-	{
-
-	}
-
-	_, ok := as.accountList[id]
-	if ok {
-		return true, nil
-	}
-	return false, xerrors.New("account ID no exists")
-
-}
-
 // Verify account's access token versify
 func (as *AccountStore) Verify(token string) (pass bool, err error) {
 	return true, nil
-}
-
-func generateID() int64 {
-	return time.Now().UnixNano()
-}
-
-func generateToken() string {
-	return string(time.Now().UnixNano())
 }
 
 func timeNow() int64 {

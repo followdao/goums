@@ -11,6 +11,7 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/oklog/run"
 	"github.com/stretchr/testify/assert"
 	"github.com/valyala/fasthttp"
 
@@ -28,9 +29,16 @@ func TestMain(m *testing.M) {
 		Addr:    ":3001",
 		Handler: r,
 	}
-	go server.ListenAndServe()
-
-	defer server.Close()
+	var g run.Group
+	g.Add(func() error {
+		return server.ListenAndServe()
+	}, func(e error) {
+		_ = server.Close()
+	})
+	err := g.Run()
+	if err != nil {
+		panic("can't run gin")
+	}
 
 	os.Exit(m.Run())
 }
@@ -69,10 +77,7 @@ func TestHttpServer_RegisterHandler(t *testing.T) {
 			Password: test.password,
 		}
 
-		body, err = json.Marshal(register)
-		if err != nil {
-
-		}
+		body, _ = json.Marshal(register)
 
 		req.Header.SetMethod("POST")
 		req.SetBody(body)
@@ -126,10 +131,7 @@ func BenchmarkHttpServer_RegisterHandler(b *testing.B) {
 			Password: strBuilder(test.password, strconv.Itoa(i)),
 		}
 
-		body, err = json.Marshal(register)
-		if err != nil {
-
-		}
+		body, _ = json.Marshal(register)
 
 		req.Header.SetMethod("POST")
 		req.SetBody(body)

@@ -19,7 +19,6 @@ var StatusName = map[int32]string{
 	4: "Suspend",
 	8: "Deleted",
 }
-
 // StatusValue  statue value map
 var StatusValue = map[string]int32{
 	"None":               0,
@@ -44,7 +43,6 @@ var RoleName = map[int32]string{
 	1: "Member",
 	2: "VIP",
 }
-
 // RoleValue role value map
 var RoleValue = map[string]int32{
 	"Guest":  0,

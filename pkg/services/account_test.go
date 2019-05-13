@@ -59,7 +59,6 @@ func TestAccountStore_Register_Error(t *testing.T) {
 
 }
 
-/**
 func TestAccountStore_Login(t *testing.T) {
 	assertions := assert.New(t)
 
@@ -71,11 +70,6 @@ func TestAccountStore_Login(t *testing.T) {
 		{"email@1.2", "123452"},
 	}
 
-	// for _, test := range tests {
-	//
-	// 	_, _ = as.Register(test.email, test.password)
-	//
-	// }
 	for _, test := range tests {
 		_, er := as.Login(test.email, test.password)
 		assertions.NoError(er)
@@ -100,9 +94,6 @@ func BenchmarkAccountStore_Login(b *testing.B) {
 		_, _ = as.Login(strBuilder(test.email, strconv.Itoa(i)), strBuilder(test.password, strconv.Itoa(i)))
 	}
 }
-
-
-*/
 
 func strBuilder(args ...string) string {
 	var str strings.Builder

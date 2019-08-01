@@ -20,6 +20,6 @@ go test -memprofile mem.out -memprofilerate 1 -cpuprofile cpu.prof -bench .
 
 ```
 go tool pprof -http=0.0.0.0:4231 cpu.prof
-go tool pprof -http=0.0.0.0:4231 mem.out
+go tool pprof -http=0.0.0.0:4232 mem.out
 ```
 

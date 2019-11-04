@@ -3,26 +3,48 @@
 [![Build Status](https://cloud.drone.io/api/badges/tsingson/go-ums/status.svg)](https://cloud.drone.io/tsingson/go-ums)
 
 
- 
-# go-ums -- a golang based User /member Management Subsystem (UMS) 
- 
- 
 
-## Update
+
+# go-ums -- a golang based User /member Management Subsystem (UMS) with AAA
+
+
+
+
+## 0. Status
 
 this project in WIP status.
 
- [previous chinese document in here ](./README_cn.md)
-
-
+ check out [document  , chinese for now ](./README_cn.md)
 
  项目重构中, [最早的中文文档在这里 ](./README_cn.md)
 
-![go-ums-all](./docs/go-ums.png)
-
- Go-ums 继续独立开发中, 目标是成为一个可以独立使用, 也可以与其他业务系统集成使用的用户( 会员) 管理子系统
 
 
-## License 
+## 1. data model /data-flow /architecutre
 
-MIT 
+![go-ums-all](./docs/go-ums-all.png)
+
+2019/10/28 update:
+
+architecutre update:
+
+![go-ums-all](assets/go-ums.png)
+
+Main change:
+
+* collect all business logic in UMS , support multiple AAA with local cache
+
+* support multiple storage with interface ( adapter to multiple storage driver )
+
+* support administrator / intergration API  via  gRPC and  RESTful
+
+* add new web UI for administrator and monitor
+
+
+
+
+
+
+## 3. License
+
+MIT

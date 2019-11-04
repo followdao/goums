@@ -7,6 +7,8 @@
 # go-ums -- a golang based User Management Subsystem (UMS)
 ~~一个 gin-goinc/gin 练手项目~~, 分布式 web 开源项目, 核心由 golang 开发,  提供用户管理(user-management-subsystem) / AAA 认证/鉴权/授 / 多业务会话共享与管理等, 以支持分布式部署及云部署为主要目标
 
+AAA --- Authentication（认证） / Authorization （授权） / Accounting (计费）
+
 ----
 
 > ### [check out docs 查看文档](./docs/readme.md)
@@ -90,7 +92,23 @@
 
 ![go-ums-all](./docs/go-ums-all.png)
 
-待续.....
+2019/10/28 update:
+
+更新以上结构, 到以下方式
+
+![go-ums-all](assets/go-ums.png)
+
+主要是:
+
+* 把业务聚合在 UMS 中, 把并发压力分散到 AAA ( 带本地缓存)
+
+* 把存储进行了接口定义, 以便支持多种存储
+
+* 增加第三方管理接口, 包括 gRPC 与 RESTful 两种接口, 以便第三方业务进行对接
+
+* 增加后台管理界面, 用 reactJS 开发后台
+
+  
 
 ## 4. dev plan 开发计划( 延迟............)
 

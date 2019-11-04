@@ -4,9 +4,10 @@
 
 
 
-# go-ums -- a golang based User /member Management Subsystem (UMS) with AAA 
 
- 
+# go-ums -- a golang based User /member Management Subsystem (UMS) with AAA
+
+
 
 
 ## 0. Status
@@ -31,19 +32,19 @@ architecutre update:
 
 Main change:
 
-* collect all business logic in UMS , support multiple AAA with local cache 
+* collect all business logic in UMS , support multiple AAA with local cache
 
 * support multiple storage with interface ( adapter to multiple storage driver )
 
-* support administrator / intergration API  via  gRPC and  RESTful 
+* support administrator / intergration API  via  gRPC and  RESTful
 
-* add new web UI for administrator and monitor 
-
-
-
- 
+* add new web UI for administrator and monitor
 
 
-## 3. License 
 
-MIT 
+
+
+
+## 3. License
+
+MIT

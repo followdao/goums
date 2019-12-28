@@ -4,7 +4,6 @@ import (
 	"time"
 
 	json "github.com/json-iterator/go"
-	"github.com/tsingson/goutils"
 	"github.com/valyala/fasthttp"
 	"github.com/valyala/fastjson"
 
@@ -61,8 +60,8 @@ func (hs *HTTPServer) RegisterHandler(ctx *fasthttp.RequestCtx) {
 		email := v.GetStringBytes("email")
 		password := v.GetStringBytes("password")
 
-		var ac *model.Account
-		ac, err = hs.as.Register(goutils.B2S(email), goutils.B2S(password))
+		var ac *model.AccountProfile
+		ac, err = hs.as.Register(email, password)
 		if err != nil {
 			errorResult(ctx, transactionID, err)
 			return
@@ -104,13 +103,13 @@ func (hs *HTTPServer) LoginHandler(ctx *fasthttp.RequestCtx) {
 		email := v.GetStringBytes("email")
 		password := v.GetStringBytes("password")
 
-		var token string
-		token, err = hs.as.Login(goutils.B2S(email), goutils.B2S(password))
+		var token []byte
+		token, err = hs.as.Login(email, password)
 		if err != nil {
 			errorResult(ctx, transactionID, err)
 			return
 		}
-		ctx.SetBodyString(token)
+		ctx.SetBody(token)
 	}
 
 }

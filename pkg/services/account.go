@@ -1,8 +1,11 @@
 package services
 
 import (
-	"strings"
+	"bytes"
 	"time"
+
+	"github.com/VictoriaMetrics/fastcache"
+	"github.com/tsingson/goutils"
 
 	"github.com/orcaman/concurrent-map"
 	"golang.org/x/xerrors"
@@ -14,19 +17,22 @@ import (
 type AccountStore struct {
 	total           int
 	accountListMail cmap.ConcurrentMap
+	accountCheck    *fastcache.Cache
 }
 
 // New initial a AccountStore
 func New() *AccountStore {
 	accountListMail := cmap.New()
+	ch := fastcache.New(1024 * 16)
 	return &AccountStore{
 		// accountList:     accountList,
 		accountListMail: accountListMail,
+		accountCheck:    ch,
 	}
 }
 
 // Register account register
-func (as *AccountStore) Register(email, password string) (account *model.Account, err error) {
+func (as *AccountStore) Register(email, password []byte) (account *model.AccountProfile, err error) {
 
 	// check parameter
 	{
@@ -41,10 +47,17 @@ func (as *AccountStore) Register(email, password string) (account *model.Account
 	}
 	// add to store
 	uid := GenerateID()
-	account = &model.Account{
+	ac := &model.Account{
 		ID:        uid,
 		Email:     email,
-		Password:  password,
+		Role:      model.RoleGuest,
+		Status:    model.StatusWaitForEmailVerify,
+		CreatedAt: timeNow(),
+		UpdatedAt: timeNow(),
+	}
+	account = &model.AccountProfile{
+		ID:        uid,
+		Email:     goutils.B2S(email),
 		Role:      model.RoleGuest,
 		Status:    model.StatusWaitForEmailVerify,
 		CreatedAt: timeNow(),
@@ -52,10 +65,10 @@ func (as *AccountStore) Register(email, password string) (account *model.Account
 	}
 	// update account profile
 	{
-		as.UpsetEmail(account)
+		as.UpsetEmail(ac)
 		as.total++
 	}
-	account.Password = ""
+
 	return
 }
 
@@ -69,23 +82,24 @@ func (as *AccountStore) UpsetEmail(ac *model.Account) {
 		res := valueInMap.([]*model.Account)
 		return append(res, nv)
 	}
-	as.accountListMail.Upsert(ac.Email, ac, cb)
+	as.accountListMail.Upsert(goutils.B2S(ac.Email), ac, cb)
+	as.accountCheck.Set(ac.Email, []byte("1"))
 
 }
 
 // Exists check account is duplicated or not
-func (as *AccountStore) Exists(email string) bool {
+func (as *AccountStore) Exists(email []byte) bool {
 	// check parameter
 	{
 
 	}
 	//
-	return as.accountListMail.Has(email)
+	return as.accountCheck.Has(email)
 
 }
 
 // Login account login
-func (as *AccountStore) Login(email, password string) (token string, err error) {
+func (as *AccountStore) Login(email, password []byte) (token []byte, err error) {
 	// check parameter
 	{
 
@@ -95,13 +109,13 @@ func (as *AccountStore) Login(email, password string) (token string, err error) 
 	ok := as.Exists(email)
 	if ok {
 		err = ErrAccountMissing
-		return "", err
+		return token, err
 	}
 
 	// generate token and update account
-	v, _ := as.accountListMail.Get(email)
+	v, _ := as.accountListMail.Get(goutils.B2S(email))
 	ac := v.(*model.Account)
-	if strings.EqualFold(ac.Password, password) {
+	if bytes.Equal(ac.Password, password) {
 		token = GenerateToken()
 		ac.AccessToken = token
 		ac.UpdatedAt = timeNow()

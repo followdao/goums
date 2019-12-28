@@ -1,20 +1,17 @@
 package fast
 
 import (
-	"net"
 	"os"
 	"strconv"
-	"strings"
 	"testing"
 	"time"
 
+	"github.com/tsingson/go-ums/pkg/utils"
+
 	json "github.com/json-iterator/go"
-	"github.com/oklog/run"
 	"github.com/stretchr/testify/assert"
 
-	"github.com/fasthttp/router"
 	"github.com/valyala/fasthttp"
-	"github.com/valyala/fasthttp/fasthttputil"
 
 	"github.com/tsingson/go-ums/model"
 )
@@ -22,49 +19,61 @@ import (
 var hs *HTTPServer
 
 func TestMain(m *testing.M) {
-	hs = NewHTTPServer()
+
+	// _ = flag.Set("alsologtostderr", "true")
+	// _ = flag.Set("log_dir", "/tmp")
+	// _ = flag.Set("v", "3")
+	// flag.Parse()
+
+	var addr = ":3001"
+	_ = FastServer(addr)
 	os.Exit(m.Run())
+
+	/**
+	  fmt.Println("begin")
+	      m.Run()
+	      fmt.Println("end")
+	*/
+
 }
 
 func TestHttpSERV_RegisterHandler(t *testing.T) {
 	var err error
-	var r *router.Router
-	{
-		r = router.New()
-		r.POST("/register", hs.RegisterHandler)
-	}
-
-	ln := fasthttputil.NewInmemoryListener()
-	s := &fasthttp.Server{
-		Handler: r.Handler,
-	}
-
-	var g run.Group
-	g.Add(func() error {
-		return s.Serve(ln)
-	}, func(e error) {
-		_ = s.Shutdown()
-	})
-
-	err = g.Run()
-	assert.NoError(t, err)
+	// var r *router.Router
+	// {
+	//	r = router.New()
+	//	r.POST("/register", hs.RegisterHandler)
+	// }
+	//
+	// ln := fasthttputil.NewInmemoryListener()
+	// s := &fasthttp.Server{
+	//	Handler: r.Handler,
+	// }
+	//
+	// var g run.Group
+	// g.Add(func() error {
+	//	return s.Serve(ln)
+	// }, func(e error) {
+	//	_ = s.Shutdown()
+	// })
+	//
+	// err = g.Run()
+	// assert.NoError(t, err)
 
 	// defer ln.Close()
 
-	c := &fasthttp.Client{
-		Dial: func(addr string) (net.Conn, error) {
-			return ln.Dial()
-		},
-	}
 	req, resp := fasthttp.AcquireRequest(), fasthttp.AcquireResponse()
 	defer func() {
 		fasthttp.ReleaseRequest(req)
 		fasthttp.ReleaseResponse(resp)
 	}()
 
-	host := ln.Addr().String()
+	// host := ln.Addr().String()
 
-	req.SetRequestURI("http://" + host + "/register")
+	url := "http://localhost:3001/register"
+
+	// req.SetRequestURI("http://" + host + "/register")
+	req.SetRequestURI(url)
 
 	req.Header.SetContentType("application/json; charset=utf-8")
 	// 	req.Header.Add("User-Agent", "Test-Agent")
@@ -77,8 +86,10 @@ func TestHttpSERV_RegisterHandler(t *testing.T) {
 		password string
 	}{
 		{"t@1.1", "123456"},
-		{"email@1.2", "123452"},
+		{"t@1.2", "123452"},
 	}
+
+	// t.Parallel()
 
 	for _, test := range tests {
 		var register = &model.AccountRequest{
@@ -92,7 +103,7 @@ func TestHttpSERV_RegisterHandler(t *testing.T) {
 		req.SetBody(body)
 
 		var timeOut = time.Duration(5 * time.Second)
-		err = c.DoTimeout(req, resp, timeOut)
+		err = fasthttp.DoTimeout(req, resp, timeOut)
 
 		assert.NoError(t, err)
 		// println("Error:", err.Error())
@@ -107,49 +118,49 @@ func TestHttpSERV_RegisterHandler(t *testing.T) {
 }
 
 func BenchmarkHttpServer_RegisterHandler(b *testing.B) {
-	var err error
-	var r *router.Router
-	{
-
-		r = router.New()
-		r.POST("/register", hs.RegisterHandler)
-	}
-
-	ln := fasthttputil.NewInmemoryListener()
-	s := &fasthttp.Server{
-		Handler: r.Handler,
-	}
-
-	var g run.Group
-	g.Add(func() error {
-		return s.Serve(ln)
-	}, func(e error) {
-		_ = s.Shutdown()
-	})
-
-	err = g.Run()
-	assert.NoError(b, err)
-
-	// defer ln.Close()
-
-	c := &fasthttp.Client{
-		Dial: func(addr string) (net.Conn, error) {
-			return ln.Dial()
-		},
-	}
+	// var err error
+	// var r *router.Router
+	// {
+	//
+	//	r = router.New()
+	//	r.POST("/register", hs.RegisterHandler)
+	// }
+	//
+	// ln := fasthttputil.NewInmemoryListener()
+	// s := &fasthttp.Server{
+	//	Handler: r.Handler,
+	// }
+	//
+	// var g run.Group
+	// g.Add(func() error {
+	//	return s.Serve(ln)
+	// }, func(e error) {
+	//	_ = s.Shutdown()
+	// })
+	//
+	// err = g.Run()
+	// assert.NoError(b, err)
+	//
+	// // defer ln.Close()
+	//
+	// c := &fasthttp.Client{
+	//	Dial: func(addr string) (net.Conn, error) {
+	//		return ln.Dial()
+	//	},
+	// }
 	req, resp := fasthttp.AcquireRequest(), fasthttp.AcquireResponse()
 	defer func() {
 		fasthttp.ReleaseRequest(req)
 		fasthttp.ReleaseResponse(resp)
 	}()
 
-	host := ln.Addr().String()
+	// host := ln.Addr().String()
+	//
+	// req.SetRequestURI("http://" + host + "/register")
 
-	req.SetRequestURI("http://" + host + "/register")
+	url := "http://localhost:3001/register"
 
-	req.Header.SetContentType("application/json; charset=utf-8")
-	// 	req.Header.Add("User-Agent", "Test-Agent")
-	req.Header.Add("Accept", "application/json")
+	// req.SetRequestURI("http://" + host + "/register")
 
 	var body []byte
 
@@ -159,11 +170,24 @@ func BenchmarkHttpServer_RegisterHandler(b *testing.B) {
 	}{"t@1.1", "123456"}
 
 	b.ResetTimer()
+	// b.RunParallel(func(pb *testing.PB) {
+	//	for pb.Next() {
+	//		Fibonacci(5000000)
+	//	}
+	// })
 	for i := 0; i < b.N; i++ {
+		req.Reset()
+		resp.Reset()
+
+		req.SetRequestURI(url)
+
+		req.Header.SetContentType("application/json; charset=utf-8")
+		// 	req.Header.Add("User-Agent", "Test-Agent")
+		req.Header.Add("Accept", "application/json")
 
 		var register = &model.AccountRequest{
-			Email:    strBuilder(test.email, strconv.Itoa(i)),
-			Password: strBuilder(test.password, strconv.Itoa(i)),
+			Email:    utils.StrBuilder(test.email, strconv.Itoa(i)),
+			Password: utils.StrBuilder(test.password, strconv.Itoa(i)),
 		}
 
 		body, _ = json.Marshal(register)
@@ -172,19 +196,10 @@ func BenchmarkHttpServer_RegisterHandler(b *testing.B) {
 		req.SetBody(body)
 
 		var timeOut = time.Duration(5 * time.Second)
-		err = c.DoTimeout(req, resp, timeOut)
+		err := fasthttp.DoTimeout(req, resp, timeOut)
 		if err != nil {
 			break
 		}
 
 	}
-}
-
-func strBuilder(args ...string) string {
-	var str strings.Builder
-
-	for _, v := range args {
-		str.WriteString(v)
-	}
-	return str.String()
 }

@@ -3,7 +3,7 @@ namespace account;
 /// Status account's profile status define
 enum Status:byte {
     None  =0,
-    WaitForEmailVerify,
+    WaitForVerify,
     Active,
     Suspend,
     Deleted,

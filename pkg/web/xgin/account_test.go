@@ -6,9 +6,10 @@ import (
 	"net/http"
 	"os"
 	"strconv"
-	"strings"
 	"testing"
 	"time"
+
+	"github.com/tsingson/go-ums/pkg/utils"
 
 	"github.com/gin-gonic/gin"
 	"github.com/oklog/run"
@@ -64,12 +65,9 @@ func TestHttpServer_RegisterHandler(t *testing.T) {
 	var body []byte
 
 	var tests = []struct {
-		email    string
-		password string
-	}{
-		{"t@1.1", "123456"},
-		{"email@1.2", "123452"},
-	}
+		email    []byte
+		password []byte
+	}{{[]byte("t@1.1"), []byte("123456")}}
 
 	for _, test := range tests {
 		var register = &model.AccountRequest{
@@ -119,16 +117,16 @@ func BenchmarkHttpServer_RegisterHandler(b *testing.B) {
 	var body []byte
 
 	var test = struct {
-		email    string
-		password string
-	}{"t@1.1", "123456"}
+		email    []byte
+		password []byte
+	}{[]byte("t@1.1"), []byte("123456")}
 
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 
 		var register = &model.AccountRequest{
-			Email:    strBuilder(test.email, strconv.Itoa(i)),
-			Password: strBuilder(test.password, strconv.Itoa(i)),
+			Email:    utils.ByteBuilder(test.email, []byte(strconv.Itoa(i))),
+			Password: utils.ByteBuilder(test.password, []byte(strconv.Itoa(i))),
 		}
 
 		body, _ = json.Marshal(register)
@@ -143,13 +141,4 @@ func BenchmarkHttpServer_RegisterHandler(b *testing.B) {
 		}
 
 	}
-}
-
-func strBuilder(args ...string) string {
-	var str strings.Builder
-
-	for _, v := range args {
-		str.WriteString(v)
-	}
-	return str.String()
 }

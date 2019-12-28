@@ -63,13 +63,13 @@ var RoleValue = map[string]int32{
 // Account  account  define
 type Account struct {
 	ID          int64  `json:"iD"`       // 全局唯一
-	Email       string `json:"email"`    // email length >=5
-	Password    string `json:"password"` // password length >=6
+	Email       []byte `json:"email"`    // email length >=5
+	Password    []byte `json:"password"` // password length >=6
 	Role        Role   `json:"role"`
 	Status      Status `json:"status"`
 	CreatedAt   int64  `json:"createdAt"`
 	UpdatedAt   int64  `json:"updatedAt"`
-	AccessToken string `json:"accessToken"` // accessToken length >=32
+	AccessToken []byte `json:"accessToken"` // accessToken length >=32
 }
 
 // AccountOperation account operation interface define

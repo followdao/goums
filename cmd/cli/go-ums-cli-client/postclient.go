@@ -58,7 +58,7 @@ func postRegister(url, email, password string) (err error) {
 	}
 	fmt.Println("-------------------> http response")
 	if resp.StatusCode() == fasthttp.StatusOK {
-		var ac *model.Account
+		var ac *model.AccountProfile
 		err = json.Unmarshal(resp.Body(), &ac)
 		if err != nil {
 			fmt.Printf("%+v\n", err)

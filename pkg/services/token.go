@@ -1,11 +1,12 @@
 package services
 
 import (
-	"strconv"
 	"time"
+
+	"github.com/tsingson/go-ums/pkg/utils"
 )
 
 // GenerateToken generate token
-func GenerateToken() string {
-	return strconv.FormatInt(time.Now().UnixNano(), 10)
+func GenerateToken() []byte {
+	return utils.Int64ToBytes(time.Now().UnixNano())
 }

@@ -1,50 +1,59 @@
-
-
-[![Build Status](https://cloud.drone.io/api/badges/tsingson/go-ums/status.svg)](https://cloud.drone.io/tsingson/go-ums)
-
-
-
-
-# go-ums -- a golang based User /member Management Subsystem (UMS) with AAA
-
+# go-ums -- a golang based Terminal /Member / User Management Sub-system (UMS) with AAA
 
 
 
 ## 0. Status
 
-this project in WIP status.
+this project back to active development, and re-design all.
 
- check out [document  , chinese for now ](./README_cn.md)
+Thie project aims for a Minimum Viable Product (MVP) or a prototype of UMS.
 
- 项目重构中, [最早的中文文档在这里 ](./README_cn.md)
+ 
+
+## 1. purpose
+
+a general terminal / member management sub-system for TV-box ( android STB )  with AAA
+
+> AAA --- Authentication（认证） / Authorization （授权） / Accounting (计费）
+
+Phase 1:   go-ums is a MVP / prototype, for TV-box / STB terminal 
+
+
+## 2. architecutre
+
+![go-ums-all](./docs/go-ums-architecture-201912.png)
 
 
 
-## 1. data model /data-flow /architecutre
+### 2.1 Business process / scenario:
 
-![go-ums-all](./docs/go-ums-all.png)
+1. The serial number generator  ( tvsn ) will generate the hardware serial number of the TV box / set-top box, import it into the database, and save it in an Excel file. The excel file is send to the factory,  and the serial number is burned to the TV box / set-top box when it is produced In the product as hardware ID
+2. Mgn provides services for the background management UI ( admin web UI ) , and provides business integration adapter ( gRPC / RESTful ... ) , support  tools like tvsn  and 3rd system / application to manages TV box / set-top box terminals, including terminal activation / deactivation, member account lifecycle management corresponding to the box etc.
+3. android apk inside TV box / set-top box, access AAA for register ( active ) / login ( authentication ) / get the TV-guide portal IP address and access token ( authorization ) 
+4. AAA / UMS provide member magement and some business logic like AAA....
+5. Session server provide session storage , and sync session status change to AAA local cache 
 
-2019/10/28 update:
 
-architecutre update:
 
-![go-ums-all](assets/go-ums.png)
+### 2.2. highlight ( maybe, it's will change everythings  until v1.0 release ):
 
-Main change:
-
-* collect all business logic in UMS , support multiple AAA with local cache
+* collect all business logic in UMS , support multiple AAA server with local session cache
 
 * support multiple storage with interface ( adapter to multiple storage driver )
 
 * support administrator / intergration API  via  gRPC and  RESTful
 
-* add new web UI for administrator and monitor
+* add operator/administrator web UI for operation
 
 
+## 3. tech stack
 
+1. base on golang and high performance go module like gRPC / flatbuffers / fasthttp / fastcache ......
+2. web UI base react javascript / HTML / css ......
+3. postgresql 11+
 
+   
 
-
-## 3. License
+## 4. License
 
 MIT

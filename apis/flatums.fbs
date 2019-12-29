@@ -1,0 +1,56 @@
+
+
+enum ServiceStatusType : int {
+  default = 0,
+  active = 1,
+  suspend = 2,
+  disabled = 3,
+  deleted = 4,
+}
+
+enum OperationType : int {
+  UnDefine = 0,
+  INSERT = 1,
+  UPDATE = 2,
+  DELETE = 3,
+}
+
+/// Result define sn response
+table Result {
+  tid:long;
+  code:long;
+  message:string;
+}
+
+/// AccessResult  result
+table AccessResult {
+  Me:AccessProfile;
+  Token:string;
+}
+
+/// AccessProfile access
+table AccessProfile {
+  UserID:string;
+  RegisterDate:string;
+  Expiration:string;
+}
+
+table TerminalList {
+  Count:long;
+  List:[TerminalProfile];
+}
+
+/// TerminalProfile 认证成功后返回用户详细档案
+table TerminalProfile {
+  userID:long;
+  activeStatus:bool;
+  activeDate:long;
+  maxActiveSession:long;
+  serviceStatus:ServiceStatusType;
+  serviceExpiration:long;
+  serialNumber:string;
+  activeCode:string;
+  accessRole:string;
+  operation:OperationType;
+}
+

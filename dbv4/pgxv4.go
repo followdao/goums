@@ -13,8 +13,9 @@ import (
 	"github.com/jackc/pgx/v4/pgxpool"
 	"go.uber.org/zap"
 
-	"github.com/tsingson/goums/dbv4/postgresconfig"
 	"github.com/tsingson/logger"
+
+	"github.com/tsingson/goums/dbv4/postgresconfig"
 )
 
 // PrepareConfig prepare configuration from vkconfig

@@ -1,5 +1,5 @@
 -- create database in pg 11+
-drop database if exists goums;
+-- drop database if exists goums;
 create database goums;
 -- create schema
 drop schema ums cascade;
@@ -16,6 +16,8 @@ apk_name varchar(64),
 apk_type varchar(64) not null,
 active_status boolean default true not null
 );
+
+comment on column ums.apktype.apk_type is 'in android project gradle setting applicationId, it is the apk_type';
 
 insert
 into

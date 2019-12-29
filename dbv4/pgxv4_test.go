@@ -16,8 +16,9 @@ import (
 
 	"go.uber.org/zap/zapcore"
 
-	"github.com/tsingson/goums/dbv4/postgresconfig"
 	"github.com/tsingson/logger"
+
+	"github.com/tsingson/goums/dbv4/postgresconfig"
 )
 
 var conn *pgx.Conn

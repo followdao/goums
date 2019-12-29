@@ -1,0 +1,11 @@
+User = "postgres"
+Password = "postgres"
+Database = "vktest"
+Port = 5432
+Host = "10.0.0.13"
+LogLevel = 5
+PoolConnections = "4"
+Debug = false
+
+[RuntimeParams]
+  standard_conforming_strings = "on"

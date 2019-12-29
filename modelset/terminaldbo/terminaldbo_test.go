@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"testing"
+	"time"
 
 	"github.com/jackc/pgx/v4"
 	"github.com/stretchr/testify/assert"
@@ -63,12 +64,59 @@ func TestTerminalDbo_InsertTerminal(t *testing.T) {
 	}
 }
 
+func TestTerminalDbo_UpdateTerminal(t *testing.T) {
+	ctx := context.Background()
+	terminalDbo, err := NewTerminalDbo(ctx, cfg, log)
+	assert.NoError(t, err)
+	sn := vtils.RandString(16)
+	co := vtils.RandString(16)
+
+	var id int64
+	id, err = terminalDbo.InsertTerminal(ctx, sn, co)
+	assert.NoError(t, err)
+	if err == nil {
+		fmt.Println("id ", id)
+	}
+
+	var c int64
+	c, err = terminalDbo.UpdateTerminal(ctx, id, true, 2, 2)
+
+	assert.NoError(t, err)
+	if err == nil {
+		fmt.Println(c)
+	}
+}
+
 func TestTerminalDbo_Notify(t *testing.T) {
 	ctx := context.Background()
-	v, err := NewTerminalDbo(ctx, cfg, log)
+	terminalDbo, err := NewTerminalDbo(ctx, cfg, log)
 	assert.NoError(t, err)
+	sn := vtils.RandString(16)
+	co := vtils.RandString(16)
+
+	var id int64
+	id, err = terminalDbo.InsertTerminal(ctx, sn, co)
+	assert.NoError(t, err)
+	if err == nil {
+		fmt.Println("id ", id)
+	}
+
+	terminalDbo.Notify(ctx)
+
+	var c int64
+	c, err = terminalDbo.UpdateTerminal(ctx, id, true, 2, 2)
 
 	assert.NoError(t, err)
+	if err == nil {
+		fmt.Println(c)
+	}
 
-	v.Notify(ctx)
+	time.Sleep(5 * time.Second)
+}
+
+func TestTerminalDbo_UmsNotify(t *testing.T) {
+	ctx := context.Background()
+	terminalDbo, err := NewTerminalDbo(ctx, cfg, log)
+	assert.NoError(t, err)
+	terminalDbo.UmsNotify(ctx)
 }

@@ -20,8 +20,10 @@ end;
 $$ language plpgsql;
 
 
+drop trigger if exists terminal_status_notify on ums.terminal;
+
 create trigger terminal_status_notify
   after update or insert or delete
   on ums.terminal
   for each row
-execute procedure ums.terminal_change_notify();
+execute procedure  ums.notify_trigger(); -- ums.terminal_change_notify();

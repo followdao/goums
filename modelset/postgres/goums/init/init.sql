@@ -5,8 +5,6 @@ create database goums;
 drop schema ums cascade;
 create schema ums;
 
-
-
 -- create extension if not exists "uuid-ossp" with schema queue;
 -- apk type
 drop table if exists ums.apktype;
@@ -36,6 +34,7 @@ serial_number varchar(64) not null,
 active_code varchar(64) not null,
 active_status boolean default false not null,
 active_date timestamp default now(),
+max_active_session bigint default 1,
 access_role varchar(32) default 'tvbox'::character varying not null,
 service_status smallint default 0,
 service_expiration timestamp default (now() + ((31)::double precision * '1 day'::interval))

@@ -8,6 +8,8 @@ this project back to active development, and re-design all.
 
 Thie project aims for a Minimum Viable Product (MVP) or a prototype of UMS.
 
+
+
  
 
 ## 1. purpose
@@ -82,8 +84,6 @@ create database goums;
 drop schema ums cascade;
 create schema ums;
 
-
-
 -- create extension if not exists "uuid-ossp" with schema queue;
 -- apk type
 drop table if exists ums.apktype;
@@ -113,6 +113,7 @@ serial_number varchar(64) not null,
 active_code varchar(64) not null,
 active_status boolean default false not null,
 active_date timestamp default now(),
+max_active_session bigint default 1,
 access_role varchar(32) default 'tvbox'::character varying not null,
 service_status smallint default 0,
 service_expiration timestamp default (now() + ((31)::double precision * '1 day'::interval))
@@ -147,14 +148,28 @@ use jetbrain's Datagrip to initial db
 
 
 
-## 4. tech stack
+## 3. tech stack
 
-1. base on golang and high performance go module like gRPC / flatbuffers / fasthttp / fastcache ......
-2. web UI base react javascript / HTML / css ......
-3. postgresql 11+
+1. base on golang and high performance go module like [gRPC](https://grpc.io) / [flatbuffers](https://google.github.io/flatbuffers/) / [fasthttp](https://github.com/valyala/fasthttp) / [jackc/pgx](https://github.com/jackc/pgx) ......
+2. web admin UI base [react-admin](https://github.com/marmelab/react-admin)  ......
+3. [postgresql 11+](https://postgresql.org)
 
-   
+Thanks a lot to all open source founder/contriber!!  and thanks a lot to  [jetbrain](https://www.jetbrains.com) for my favorite Goland IDE / Datagrip IDE / Webstorm IDE, thanks [GOlang](https://golang.org), those tools save many time so that i can share more happy time with my family and friends.
 
-## 4. License
+
+
+Any issues / discussion / PRs is welcome!!
+
+
+
+## 4. FAQ 
+1. why gRPC + flatbuffers inside goums, not gRPC + protobuffers , or RESTful ( http + JSON ) ?
+> to supports fast scaling deployment on daemon, every AAA with local cache ( session / member profile... etc ) to service multi-region, millions of terminals. UMS / AAA must synchronize session data / authentication data fast enouth.  via flatbuffers , fast decoding,  smaller binary data transfer to get  higher performance
+>
+> protobufers is balance choose for 3rd system / tools to interactive with goums
+>
+> RESTful  for old style web application only 
+
+## 5. License
 
 MIT

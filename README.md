@@ -143,7 +143,132 @@ use jetbrain's Datagrip to initial db
 
 #### 2.4.3  IDL in protobuffers / flatbuffers 
 
+/apis/protoums.proto
 
+```
+syntax = "proto3";
+package protoums;
+
+/// Result define sn response
+message Result {
+    int64 tid = 1;
+    int64 code = 2;
+    string message = 3;
+}
+
+/// AccessResult  result
+message AccessResult {
+    AccessProfile Me = 1;
+    string Token = 2;
+}
+
+/// AccessProfile access
+message AccessProfile {
+    string UserID = 1;
+    string RegisterDate = 2;
+    string Expiration = 3;
+}
+
+enum ServiceStatusType {
+    default = 0;
+    active = 1;
+    suspend = 2;
+    disabled = 3;
+    deleted = 4;
+}
+
+enum OperationType {
+    UnDefine =0;
+    insert = 1;
+    update = 2;
+    delete = 3;
+}
+
+message TerminalList {
+    int64 Count = 1;
+    repeated TerminalProfile List = 2;
+}
+
+/// TerminalProfile 认证成功后返回用户详细档案
+message TerminalProfile {
+    int64 userID = 1;
+    bool activeStatus = 2;
+    int64 activeDate = 3;
+    int64 maxActiveSession = 4;
+    ServiceStatusType serviceStatus = 5;
+    int64 serviceExpiration = 6;
+    string serialNumber = 7;
+    string activeCode = 8;
+    string accessRole = 9;
+    OperationType operation = 10;
+}
+
+
+```
+
+/apis/flatums.fbs
+
+```
+namespace flatums;
+
+attribute "priority";
+
+enum ServiceStatusType : int {
+  default = 0,
+  active = 1,
+  suspend = 2,
+  disabled = 3,
+  deleted = 4,
+}
+
+enum OperationType : int {
+  UnDefine = 0,
+  INSERT = 1,
+  UPDATE = 2,
+  DELETE = 3,
+}
+
+/// Result define sn response
+table Result {
+  tid:long;
+  code:long;
+  message:string;
+}
+
+/// AccessResult  result
+table AccessResult {
+  Me:AccessProfile;
+  Token:string;
+}
+
+/// AccessProfile access
+table AccessProfile {
+  UserID:string;
+  RegisterDate:string;
+  Expiration:string;
+}
+
+table TerminalList {
+  Count:long;
+  List:[TerminalProfile];
+}
+
+/// TerminalProfile  
+table TerminalProfile {
+  userID:long;
+  activeStatus:bool;
+  activeDate:long;
+  maxActiveSession:long;
+  serviceStatus:ServiceStatusType;
+  serviceExpiration:long;
+  serialNumber:string;
+  activeCode:string;
+  accessRole:string;
+  operation:OperationType;
+}
+
+
+```
 
 ## 3. tech stack and depends
 

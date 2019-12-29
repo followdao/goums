@@ -1,4 +1,6 @@
+namespace flatums;
 
+attribute "priority";
 
 enum ServiceStatusType : int {
   default = 0,
@@ -40,7 +42,7 @@ table TerminalList {
   List:[TerminalProfile];
 }
 
-/// TerminalProfile 认证成功后返回用户详细档案
+/// TerminalProfile
 table TerminalProfile {
   userID:long;
   activeStatus:bool;

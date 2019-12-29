@@ -9,9 +9,6 @@ this project back to active development, and re-design all.
 Thie project aims for a Minimum Viable Product (MVP) or a prototype of UMS.
 
 
-
- 
-
 ## 1. purpose
 
 a general terminal / member management sub-system for TV-box ( android STB )  with AAA
@@ -148,17 +145,31 @@ use jetbrain's Datagrip to initial db
 
 
 
-## 3. tech stack
+## 3. tech stack and depends
 
-1. base on golang and high performance go module like [gRPC](https://grpc.io) / [flatbuffers](https://google.github.io/flatbuffers/) / [fasthttp](https://github.com/valyala/fasthttp) / [jackc/pgx](https://github.com/jackc/pgx) ......
-2. web admin UI base [react-admin](https://github.com/marmelab/react-admin)  ......
-3. [postgresql 11+](https://postgresql.org)
+### 3.1 depends 
 
-Thanks a lot to all open source founder/contriber!!  and thanks a lot to  [jetbrain](https://www.jetbrains.com) for my favorite Goland IDE / Datagrip IDE / Webstorm IDE, thanks [GOlang](https://golang.org), those tools save many time so that i can share more happy time with my family and friends.
+* [nats-server](https://nats.io/) -- a simple, secure and high performance open source messaging system for cloud native applications, IoT messaging, and microservices architectures.
+* [liftbridge](https://liftbridge.io/) -- Lightweight, fault-tolerant message streams
+* [postgresql 11+](https://postgresql.org) -- The World's Most Advanced Open Source Relational Database
 
+### 3.2 golang module / framework
+base on golang and high performance go module like 
+* [gRPC](https://grpc.io) -- A high performance, open-source universal RPC framework. from google
+* [flatbuffers](https://google.github.io/flatbuffers/) -- an efficient cross platform serialization library for C++, C#, C, Go, Java, JavaScript, Lobster, Lua, TypeScript, PHP, Python, and Rust. It was originally created at Google for game development and other performance-critical applications.
+* [fasthttp](https://github.com/valyala/fasthttp) -- Fast HTTP package for Go. Tuned for high performance. Zero memory allocations in hot paths.
+* [jackc/pgx](https://github.com/jackc/pgx) -- pgx is a pure Go driver and toolkit for PostgreSQL. The driver part of pgx is compatible with database/sql but also offers a native interface similar in style to database/sql that offers better performance and more features
 
+### 3.3 web UI
+web admin UI base
+*  [react-admin](https://github.com/marmelab/react-admin)  -- A frontend Framework for building B2B applications running in the browser on top of REST/GraphQL APIs, using ES6, React and Material Design and react
 
-Any issues / discussion / PRs is welcome!!
+### 3.4 THANKS
+Thanks a lot to all open source founder/contriber!!  
+
+and thanks a lot to  [jetbrain](https://www.jetbrains.com) for my favorite Goland IDE / Datagrip IDE / Webstorm IDE, thanks [GOlang](https://golang.org), those tools save many time so that i can share more happy time with my family and friends.
+
+**Any issues / discussion / PRs r welcome!!**
 
 
 

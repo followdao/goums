@@ -86,10 +86,11 @@ create schema ums;
 
 -- create extension if not exists "uuid-ossp" with schema queue;
 -- apk type
-drop table if exists ums.apktype ;
+drop table if exists ums.apktype;
 create table if not exists ums.apktype
 (
-id int GENERATED ALWAYS AS IDENTITY (cache 100)   primary key,
+id int generated always as identity (cache 100)
+  primary key,
 apk_name varchar(64),
 apk_type varchar(64) not null,
 active_status boolean default true not null
@@ -98,9 +99,9 @@ active_status boolean default true not null
 insert
 into
   ums.apktype
-(apk_name, apk_type, active_status)
+(apk_name,apk_type,active_status)
 values
-('appleTV','com.apple.liveTV',true ),
+('appleTV','com.apple.liveTV',true),
 ('appleVOD','com.apple.movieHD',false);
 
 drop table if exists ums.terminal;
@@ -124,9 +125,13 @@ comment on column ums.terminal.service_status is 'service status define:
 3 disabled
 4 deleted';
 
-insert into ums.terminal ( serial_number, active_code,   access_role) values
-( 'aaaaaaaa', '12345678', 'tvbox'),
-( 'bbbbbbbb', '11112222', 'phone');
+insert
+into
+  ums.terminal
+(serial_number,active_code,access_role)
+values
+('aaaaaaaa','12345678','tvbox'),
+('bbbbbbbb','11112222','phone');
 
 ```
 

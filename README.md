@@ -33,7 +33,7 @@ a general terminal / member management sub-system for TV-box ( android STB )  wi
 
 ### 2.1 architecutre
 
-![go-ums-all](./docs/go-ums-architecture-201912.png)
+![go-ums-all](./docs/go-ums-architecture-2019121.png)
 
 go-ums-interface-201912.png
 
@@ -55,7 +55,7 @@ APK  access AAA for register ( active ) / login ( authentication ) / get the TV-
 
 ### 2.3. protocols between modules
 
-![go-ums-interface](./docs/go-ums-interface-201912.png)
+![go-ums-interface](./docs/go-ums-interface-2019121.png)
 
 * In the diagram, mark 1 is the HTTP protocol ( RESTful ),  JSON encode 
 * mark 2,   gRPC with protobuf encode 
@@ -135,10 +135,10 @@ values
 
 use jetbrain's Datagrip to initial db
 
-![db-apktype-table](./docs/apktype.png)
+![db-apktype-table](./docs/apktype1.png)
 
 
-![db-terminal-table](./docs/terminal.png)
+![db-terminal-table](./docs/terminal1.png)
 
 
 #### 2.4.3  IDL in protobuffers / flatbuffers 

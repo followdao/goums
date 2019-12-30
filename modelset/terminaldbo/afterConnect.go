@@ -9,6 +9,7 @@ import (
 const (
 	sqlInsertTerminal = "sqlInsertTerminal"
 	sqlUpdateTerminal = "sqlUpdateTerminal"
+	sqlActiveTerminal = "sqlActiveTerminal"
 	SqlListenTerminal = "sqlListenTerminal"
 )
 
@@ -22,6 +23,18 @@ set
   , service_status = $3
 where
   id = $4`,
+
+  sqlActiveTerminal:`select
+  id
+  , serial_number
+  , active_status
+  , active_date
+  , max_active_session
+  , access_role
+  , service_status
+  , service_expiration
+from
+  ums.active($1,$2 , $3)`,
 
 		SqlListenTerminal: `listen terninal_notify`,
 	}

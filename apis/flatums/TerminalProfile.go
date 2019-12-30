@@ -6,18 +6,18 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
-/// TerminalProfile 认证成功后返回用户详细档案
+/// TerminalProfile
 type TerminalProfileT struct {
 	UserID            int64
 	ActiveStatus      bool
 	ActiveDate        int64
 	MaxActiveSession  int64
-	ServiceStatus     int64
+	ServiceStatus     ServiceStatusType
 	ServiceExpiration int64
 	SerialNumber      string
 	ActiveCode        string
 	AccessRole        string
-	Operation         string
+	Operation         NotifyType
 }
 
 func TerminalProfilePack(builder *flatbuffers.Builder, t *TerminalProfileT) flatbuffers.UOffsetT {
@@ -27,7 +27,6 @@ func TerminalProfilePack(builder *flatbuffers.Builder, t *TerminalProfileT) flat
 	serialNumberOffset := builder.CreateString(t.SerialNumber)
 	activeCodeOffset := builder.CreateString(t.ActiveCode)
 	accessRoleOffset := builder.CreateString(t.AccessRole)
-	operationOffset := builder.CreateString(t.Operation)
 	TerminalProfileStart(builder)
 	TerminalProfileAddUserID(builder, t.UserID)
 	TerminalProfileAddActiveStatus(builder, t.ActiveStatus)
@@ -38,7 +37,7 @@ func TerminalProfilePack(builder *flatbuffers.Builder, t *TerminalProfileT) flat
 	TerminalProfileAddSerialNumber(builder, serialNumberOffset)
 	TerminalProfileAddActiveCode(builder, activeCodeOffset)
 	TerminalProfileAddAccessRole(builder, accessRoleOffset)
-	TerminalProfileAddOperation(builder, operationOffset)
+	TerminalProfileAddOperation(builder, t.Operation)
 	return TerminalProfileEnd(builder)
 }
 
@@ -52,7 +51,7 @@ func (rcv *TerminalProfile) UnPackTo(t *TerminalProfileT) {
 	t.SerialNumber = string(rcv.SerialNumber())
 	t.ActiveCode = string(rcv.ActiveCode())
 	t.AccessRole = string(rcv.AccessRole())
-	t.Operation = string(rcv.Operation())
+	t.Operation = rcv.Operation()
 }
 
 func (rcv *TerminalProfile) UnPack() *TerminalProfileT {
@@ -132,16 +131,16 @@ func (rcv *TerminalProfile) MutateMaxActiveSession(n int64) bool {
 	return rcv._tab.MutateInt64Slot(10, n)
 }
 
-func (rcv *TerminalProfile) ServiceStatus() int64 {
+func (rcv *TerminalProfile) ServiceStatus() ServiceStatusType {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(12))
 	if o != 0 {
-		return rcv._tab.GetInt64(o + rcv._tab.Pos)
+		return ServiceStatusType(rcv._tab.GetInt32(o + rcv._tab.Pos))
 	}
 	return 0
 }
 
-func (rcv *TerminalProfile) MutateServiceStatus(n int64) bool {
-	return rcv._tab.MutateInt64Slot(12, n)
+func (rcv *TerminalProfile) MutateServiceStatus(n ServiceStatusType) bool {
+	return rcv._tab.MutateInt32Slot(12, int32(n))
 }
 
 func (rcv *TerminalProfile) ServiceExpiration() int64 {
@@ -180,12 +179,16 @@ func (rcv *TerminalProfile) AccessRole() []byte {
 	return nil
 }
 
-func (rcv *TerminalProfile) Operation() []byte {
+func (rcv *TerminalProfile) Operation() NotifyType {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(22))
 	if o != 0 {
-		return rcv._tab.ByteVector(o + rcv._tab.Pos)
+		return NotifyType(rcv._tab.GetInt32(o + rcv._tab.Pos))
 	}
-	return nil
+	return 0
+}
+
+func (rcv *TerminalProfile) MutateOperation(n NotifyType) bool {
+	return rcv._tab.MutateInt32Slot(22, int32(n))
 }
 
 func TerminalProfileStart(builder *flatbuffers.Builder) {
@@ -208,8 +211,8 @@ func TerminalProfileAddMaxActiveSession(builder *flatbuffers.Builder, maxActiveS
 	builder.PrependInt64Slot(3, maxActiveSession, 0)
 }
 
-func TerminalProfileAddServiceStatus(builder *flatbuffers.Builder, serviceStatus int64) {
-	builder.PrependInt64Slot(4, serviceStatus, 0)
+func TerminalProfileAddServiceStatus(builder *flatbuffers.Builder, serviceStatus ServiceStatusType) {
+	builder.PrependInt32Slot(4, int32(serviceStatus), 0)
 }
 
 func TerminalProfileAddServiceExpiration(builder *flatbuffers.Builder, serviceExpiration int64) {
@@ -228,8 +231,8 @@ func TerminalProfileAddAccessRole(builder *flatbuffers.Builder, accessRole flatb
 	builder.PrependUOffsetTSlot(8, flatbuffers.UOffsetT(accessRole), 0)
 }
 
-func TerminalProfileAddOperation(builder *flatbuffers.Builder, operation flatbuffers.UOffsetT) {
-	builder.PrependUOffsetTSlot(9, flatbuffers.UOffsetT(operation), 0)
+func TerminalProfileAddOperation(builder *flatbuffers.Builder, operation NotifyType) {
+	builder.PrependInt32Slot(9, int32(operation), 0)
 }
 
 func TerminalProfileEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

@@ -10,11 +10,17 @@ enum ServiceStatusType : int {
   deleted = 4,
 }
 
+enum NotifyType : int {
+  UnDefine = 0,
+  insert = 1,
+  update = 2,
+  delete = 3,
+}
+
 enum OperationType : int {
   UnDefine = 0,
-  INSERT = 1,
-  UPDATE = 2,
-  DELETE = 3,
+  active = 1,
+  auth = 2,
 }
 
 /// Result define sn response
@@ -33,7 +39,7 @@ table AccessResult {
 /// AccessProfile access
 table AccessProfile {
   UserID:string;
-  RegisterDate:string;
+  activeDate:string;
   Expiration:string;
 }
 
@@ -53,6 +59,20 @@ table TerminalProfile {
   serialNumber:string;
   activeCode:string;
   accessRole:string;
+  operation:NotifyType;
+}
+
+///  request from tv box
+table TerminalRequest {
+  userID:long;
+  serialNumber:string;
+  activeCode:string;
+  apkType:string;
   operation:OperationType;
 }
 
+/// UmsService backend gRPC service
+rpc_service AaaService {
+    Active(TerminalRequest):AccessResult(streaming: "none");
+    Import(TerminalList):Result(streaming: "none");
+}

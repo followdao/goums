@@ -7,24 +7,21 @@ import "strconv"
 type OperationType int32
 
 const (
-	OperationTypedefault OperationType = 0
-	OperationTypeInsert  OperationType = 1
-	OperationTypeUpdate  OperationType = 2
-	OperationTypeDelete  OperationType = 3
+	OperationTypeUnDefine OperationType = 0
+	OperationTypeactive   OperationType = 1
+	OperationTypeauth     OperationType = 2
 )
 
 var EnumNamesOperationType = map[OperationType]string{
-	OperationTypedefault: "default",
-	OperationTypeInsert:  "Insert",
-	OperationTypeUpdate:  "Update",
-	OperationTypeDelete:  "Delete",
+	OperationTypeUnDefine: "UnDefine",
+	OperationTypeactive:   "active",
+	OperationTypeauth:     "auth",
 }
 
 var EnumValuesOperationType = map[string]OperationType{
-	"default": OperationTypedefault,
-	"Insert":  OperationTypeInsert,
-	"Update":  OperationTypeUpdate,
-	"Delete":  OperationTypeDelete,
+	"UnDefine": OperationTypeUnDefine,
+	"active":   OperationTypeactive,
+	"auth":     OperationTypeauth,
 }
 
 func (v OperationType) String() string {

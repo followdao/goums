@@ -17,23 +17,29 @@ message AccessResult {
 /// AccessProfile access
 message AccessProfile {
     string UserID = 1;
-    string RegisterDate = 2;
+    string activeDate = 2;
     string Expiration = 3;
 }
 
 enum ServiceStatusType {
-    default = 0;
+    StDefault = 0;
     active = 1;
     suspend = 2;
     disabled = 3;
     deleted = 4;
 }
 
-enum OperationType {
-    UnDefine =0;
+enum NotifyType {
+    NoUnDefine =0;
     insert = 1;
     update = 2;
     delete = 3;
+}
+
+enum OperationType {
+    OpUnDefine =0;
+    OpActive = 1;
+    OpAuth = 2;
 }
 
 message TerminalList {
@@ -41,7 +47,7 @@ message TerminalList {
     repeated TerminalProfile List = 2;
 }
 
-/// TerminalProfile 认证成功后返回用户详细档案
+/// TerminalProfile
 message TerminalProfile {
     int64 userID = 1;
     bool activeStatus = 2;
@@ -52,6 +58,21 @@ message TerminalProfile {
     string serialNumber = 7;
     string activeCode = 8;
     string accessRole = 9;
-    OperationType operation = 10;
+    NotifyType operation = 10;
+}
+///  request from tv box
+message TerminalRequest {
+    int64 userID = 1;
+    string serialNumber = 2;
+    string activeCode = 3;
+    string apkType =4;
+    OperationType operation = 5;
+}
+/// UmsService backend gRPC service
+service UmsService {
+    rpc Active (TerminalRequest) returns (AccessResult) {
+    }
+    rpc Import (TerminalList) returns (Result) {
+    }
 }
 

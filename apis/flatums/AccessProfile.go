@@ -8,9 +8,9 @@ import (
 
 /// AccessProfile access
 type AccessProfileT struct {
-	UserID       string
-	RegisterDate string
-	Expiration   string
+	UserID     string
+	ActiveDate string
+	Expiration string
 }
 
 func AccessProfilePack(builder *flatbuffers.Builder, t *AccessProfileT) flatbuffers.UOffsetT {
@@ -18,18 +18,18 @@ func AccessProfilePack(builder *flatbuffers.Builder, t *AccessProfileT) flatbuff
 		return 0
 	}
 	UserIDOffset := builder.CreateString(t.UserID)
-	RegisterDateOffset := builder.CreateString(t.RegisterDate)
+	activeDateOffset := builder.CreateString(t.ActiveDate)
 	ExpirationOffset := builder.CreateString(t.Expiration)
 	AccessProfileStart(builder)
 	AccessProfileAddUserID(builder, UserIDOffset)
-	AccessProfileAddRegisterDate(builder, RegisterDateOffset)
+	AccessProfileAddActiveDate(builder, activeDateOffset)
 	AccessProfileAddExpiration(builder, ExpirationOffset)
 	return AccessProfileEnd(builder)
 }
 
 func (rcv *AccessProfile) UnPackTo(t *AccessProfileT) {
 	t.UserID = string(rcv.UserID())
-	t.RegisterDate = string(rcv.RegisterDate())
+	t.ActiveDate = string(rcv.ActiveDate())
 	t.Expiration = string(rcv.Expiration())
 }
 
@@ -70,7 +70,7 @@ func (rcv *AccessProfile) UserID() []byte {
 	return nil
 }
 
-func (rcv *AccessProfile) RegisterDate() []byte {
+func (rcv *AccessProfile) ActiveDate() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
 		return rcv._tab.ByteVector(o + rcv._tab.Pos)
@@ -94,8 +94,8 @@ func AccessProfileAddUserID(builder *flatbuffers.Builder, UserID flatbuffers.UOf
 	builder.PrependUOffsetTSlot(0, flatbuffers.UOffsetT(UserID), 0)
 }
 
-func AccessProfileAddRegisterDate(builder *flatbuffers.Builder, RegisterDate flatbuffers.UOffsetT) {
-	builder.PrependUOffsetTSlot(1, flatbuffers.UOffsetT(RegisterDate), 0)
+func AccessProfileAddActiveDate(builder *flatbuffers.Builder, activeDate flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(1, flatbuffers.UOffsetT(activeDate), 0)
 }
 
 func AccessProfileAddExpiration(builder *flatbuffers.Builder, Expiration flatbuffers.UOffsetT) {

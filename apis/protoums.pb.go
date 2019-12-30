@@ -4,12 +4,16 @@
 package protoums
 
 import (
+	context "context"
 	fmt "fmt"
 	io "io"
 	math "math"
 	math_bits "math/bits"
 
 	proto "github.com/golang/protobuf/proto"
+	grpc "google.golang.org/grpc"
+	codes "google.golang.org/grpc/codes"
+	status "google.golang.org/grpc/status"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -28,15 +32,15 @@ const _ = proto.ProtoPackageIsVersion3 // please upgrade the proto package
 type ServiceStatusType int32
 
 const (
-	ServiceStatusType_default  ServiceStatusType = 0
-	ServiceStatusType_active   ServiceStatusType = 1
-	ServiceStatusType_suspend  ServiceStatusType = 2
-	ServiceStatusType_disabled ServiceStatusType = 3
-	ServiceStatusType_deleted  ServiceStatusType = 4
+	ServiceStatusType_StDefault ServiceStatusType = 0
+	ServiceStatusType_active    ServiceStatusType = 1
+	ServiceStatusType_suspend   ServiceStatusType = 2
+	ServiceStatusType_disabled  ServiceStatusType = 3
+	ServiceStatusType_deleted   ServiceStatusType = 4
 )
 
 var ServiceStatusType_name = map[int32]string{
-	0: "default",
+	0: "StDefault",
 	1: "active",
 	2: "suspend",
 	3: "disabled",
@@ -44,11 +48,11 @@ var ServiceStatusType_name = map[int32]string{
 }
 
 var ServiceStatusType_value = map[string]int32{
-	"default":  0,
-	"active":   1,
-	"suspend":  2,
-	"disabled": 3,
-	"deleted":  4,
+	"StDefault": 0,
+	"active":    1,
+	"suspend":   2,
+	"disabled":  3,
+	"deleted":   4,
 }
 
 func (x ServiceStatusType) String() string {
@@ -59,27 +63,55 @@ func (ServiceStatusType) EnumDescriptor() ([]byte, []int) {
 	return fileDescriptor_b63d550ca130b592, []int{0}
 }
 
-type OperationType int32
+type NotifyType int32
 
 const (
-	OperationType_UnDefine OperationType = 0
-	OperationType_insert   OperationType = 1
-	OperationType_update   OperationType = 2
-	OperationType_delete   OperationType = 3
+	NotifyType_NoUnDefine NotifyType = 0
+	NotifyType_insert     NotifyType = 1
+	NotifyType_update     NotifyType = 2
+	NotifyType_delete     NotifyType = 3
 )
 
-var OperationType_name = map[int32]string{
-	0: "UnDefine",
+var NotifyType_name = map[int32]string{
+	0: "NoUnDefine",
 	1: "insert",
 	2: "update",
 	3: "delete",
 }
 
+var NotifyType_value = map[string]int32{
+	"NoUnDefine": 0,
+	"insert":     1,
+	"update":     2,
+	"delete":     3,
+}
+
+func (x NotifyType) String() string {
+	return proto.EnumName(NotifyType_name, int32(x))
+}
+
+func (NotifyType) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor_b63d550ca130b592, []int{1}
+}
+
+type OperationType int32
+
+const (
+	OperationType_OpUnDefine OperationType = 0
+	OperationType_OpActive   OperationType = 1
+	OperationType_OpAuth     OperationType = 2
+)
+
+var OperationType_name = map[int32]string{
+	0: "OpUnDefine",
+	1: "OpActive",
+	2: "OpAuth",
+}
+
 var OperationType_value = map[string]int32{
-	"UnDefine": 0,
-	"insert":   1,
-	"update":   2,
-	"delete":   3,
+	"OpUnDefine": 0,
+	"OpActive":   1,
+	"OpAuth":     2,
 }
 
 func (x OperationType) String() string {
@@ -87,7 +119,7 @@ func (x OperationType) String() string {
 }
 
 func (OperationType) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_b63d550ca130b592, []int{1}
+	return fileDescriptor_b63d550ca130b592, []int{2}
 }
 
 /// Result define sn response
@@ -223,7 +255,7 @@ func (m *AccessResult) GetToken() string {
 /// AccessProfile access
 type AccessProfile struct {
 	UserID               string   `protobuf:"bytes,1,opt,name=UserID,proto3" json:"UserID,omitempty"`
-	RegisterDate         string   `protobuf:"bytes,2,opt,name=RegisterDate,proto3" json:"RegisterDate,omitempty"`
+	ActiveDate           string   `protobuf:"bytes,2,opt,name=activeDate,proto3" json:"activeDate,omitempty"`
 	Expiration           string   `protobuf:"bytes,3,opt,name=Expiration,proto3" json:"Expiration,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
@@ -275,9 +307,9 @@ func (m *AccessProfile) GetUserID() string {
 	return ""
 }
 
-func (m *AccessProfile) GetRegisterDate() string {
+func (m *AccessProfile) GetActiveDate() string {
 	if m != nil {
-		return m.RegisterDate
+		return m.ActiveDate
 	}
 	return ""
 }
@@ -349,7 +381,7 @@ func (m *TerminalList) GetList() []*TerminalProfile {
 	return nil
 }
 
-/// TerminalProfile 认证成功后返回用户详细档案
+/// TerminalProfile
 type TerminalProfile struct {
 	UserID               int64             `protobuf:"varint,1,opt,name=userID,proto3" json:"userID,omitempty"`
 	ActiveStatus         bool              `protobuf:"varint,2,opt,name=activeStatus,proto3" json:"activeStatus,omitempty"`
@@ -360,7 +392,7 @@ type TerminalProfile struct {
 	SerialNumber         string            `protobuf:"bytes,7,opt,name=serialNumber,proto3" json:"serialNumber,omitempty"`
 	ActiveCode           string            `protobuf:"bytes,8,opt,name=activeCode,proto3" json:"activeCode,omitempty"`
 	AccessRole           string            `protobuf:"bytes,9,opt,name=accessRole,proto3" json:"accessRole,omitempty"`
-	Operation            OperationType     `protobuf:"varint,10,opt,name=operation,proto3,enum=protoums.OperationType" json:"operation,omitempty"`
+	Operation            NotifyType        `protobuf:"varint,10,opt,name=operation,proto3,enum=protoums.NotifyType" json:"operation,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}          `json:"-"`
 	XXX_unrecognized     []byte            `json:"-"`
 	XXX_sizecache        int32             `json:"-"`
@@ -436,7 +468,7 @@ func (m *TerminalProfile) GetServiceStatus() ServiceStatusType {
 	if m != nil {
 		return m.ServiceStatus
 	}
-	return ServiceStatusType_default
+	return ServiceStatusType_StDefault
 }
 
 func (m *TerminalProfile) GetServiceExpiration() int64 {
@@ -467,60 +499,273 @@ func (m *TerminalProfile) GetAccessRole() string {
 	return ""
 }
 
-func (m *TerminalProfile) GetOperation() OperationType {
+func (m *TerminalProfile) GetOperation() NotifyType {
 	if m != nil {
 		return m.Operation
 	}
-	return OperationType_UnDefine
+	return NotifyType_NoUnDefine
+}
+
+///  request from tv box
+type TerminalRequest struct {
+	UserID               int64         `protobuf:"varint,1,opt,name=userID,proto3" json:"userID,omitempty"`
+	SerialNumber         string        `protobuf:"bytes,2,opt,name=serialNumber,proto3" json:"serialNumber,omitempty"`
+	ActiveCode           string        `protobuf:"bytes,3,opt,name=activeCode,proto3" json:"activeCode,omitempty"`
+	ApkType              string        `protobuf:"bytes,4,opt,name=apkType,proto3" json:"apkType,omitempty"`
+	Operation            OperationType `protobuf:"varint,5,opt,name=operation,proto3,enum=protoums.OperationType" json:"operation,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}      `json:"-"`
+	XXX_unrecognized     []byte        `json:"-"`
+	XXX_sizecache        int32         `json:"-"`
+}
+
+func (m *TerminalRequest) Reset()         { *m = TerminalRequest{} }
+func (m *TerminalRequest) String() string { return proto.CompactTextString(m) }
+func (*TerminalRequest) ProtoMessage()    {}
+func (*TerminalRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_b63d550ca130b592, []int{5}
+}
+
+func (m *TerminalRequest) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+
+func (m *TerminalRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_TerminalRequest.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+
+func (m *TerminalRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_TerminalRequest.Merge(m, src)
+}
+
+func (m *TerminalRequest) XXX_Size() int {
+	return m.Size()
+}
+
+func (m *TerminalRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_TerminalRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_TerminalRequest proto.InternalMessageInfo
+
+func (m *TerminalRequest) GetUserID() int64 {
+	if m != nil {
+		return m.UserID
+	}
+	return 0
+}
+
+func (m *TerminalRequest) GetSerialNumber() string {
+	if m != nil {
+		return m.SerialNumber
+	}
+	return ""
+}
+
+func (m *TerminalRequest) GetActiveCode() string {
+	if m != nil {
+		return m.ActiveCode
+	}
+	return ""
+}
+
+func (m *TerminalRequest) GetApkType() string {
+	if m != nil {
+		return m.ApkType
+	}
+	return ""
+}
+
+func (m *TerminalRequest) GetOperation() OperationType {
+	if m != nil {
+		return m.Operation
+	}
+	return OperationType_OpUnDefine
 }
 
 func init() {
 	proto.RegisterEnum("protoums.ServiceStatusType", ServiceStatusType_name, ServiceStatusType_value)
+	proto.RegisterEnum("protoums.NotifyType", NotifyType_name, NotifyType_value)
 	proto.RegisterEnum("protoums.OperationType", OperationType_name, OperationType_value)
 	proto.RegisterType((*Result)(nil), "protoums.Result")
 	proto.RegisterType((*AccessResult)(nil), "protoums.AccessResult")
 	proto.RegisterType((*AccessProfile)(nil), "protoums.AccessProfile")
 	proto.RegisterType((*TerminalList)(nil), "protoums.TerminalList")
 	proto.RegisterType((*TerminalProfile)(nil), "protoums.TerminalProfile")
+	proto.RegisterType((*TerminalRequest)(nil), "protoums.TerminalRequest")
 }
 
 func init() { proto.RegisterFile("protoums.proto", fileDescriptor_b63d550ca130b592) }
 
 var fileDescriptor_b63d550ca130b592 = []byte{
-	// 514 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x64, 0x92, 0xdd, 0x6e, 0xd3, 0x30,
-	0x14, 0xc7, 0x97, 0xa4, 0xeb, 0xc7, 0x69, 0x3b, 0x3c, 0x0b, 0x41, 0x10, 0x52, 0x55, 0xe5, 0x86,
-	0xaa, 0x82, 0x5d, 0x14, 0xf1, 0x00, 0x65, 0x45, 0x02, 0x89, 0x02, 0x72, 0xbb, 0x07, 0x70, 0x9b,
-	0xd3, 0xc9, 0x5a, 0x9a, 0x44, 0xb6, 0x33, 0x8d, 0x37, 0xe1, 0x05, 0x78, 0x17, 0x2e, 0x79, 0x04,
-	0x54, 0x5e, 0x04, 0xd9, 0x4e, 0x48, 0xba, 0xde, 0x9d, 0xf3, 0xff, 0x9f, 0xaf, 0x5f, 0x62, 0xb8,
-	0xc8, 0x65, 0xa6, 0xb3, 0x62, 0xaf, 0xae, 0x6c, 0x40, 0xbb, 0x55, 0x1e, 0x7d, 0x84, 0x36, 0x43,
-	0x55, 0x24, 0x9a, 0x12, 0x08, 0xb4, 0x88, 0x43, 0x6f, 0xec, 0x4d, 0x02, 0x66, 0x42, 0x4a, 0xa1,
-	0xb5, 0xcd, 0x62, 0x0c, 0x7d, 0x2b, 0xd9, 0x98, 0x86, 0xd0, 0xd9, 0xa3, 0x52, 0xfc, 0x16, 0xc3,
-	0x60, 0xec, 0x4d, 0x7a, 0xac, 0x4a, 0xa3, 0x25, 0x0c, 0xe6, 0xdb, 0x2d, 0x2a, 0x55, 0xce, 0x7b,
-	0x05, 0xfe, 0x12, 0xed, 0xb8, 0xfe, 0xec, 0xf9, 0xd5, 0xff, 0x03, 0x5c, 0xcd, 0x37, 0x99, 0xed,
-	0x44, 0x82, 0xcc, 0x5f, 0x22, 0x7d, 0x0a, 0xe7, 0xeb, 0xec, 0x0e, 0x53, 0xbb, 0xa7, 0xc7, 0x5c,
-	0x12, 0xdd, 0xc1, 0xf0, 0xa8, 0x94, 0x3e, 0x83, 0xf6, 0x8d, 0x42, 0xf9, 0x69, 0x61, 0x67, 0xf6,
-	0x58, 0x99, 0xd1, 0x08, 0x06, 0x0c, 0x6f, 0x85, 0xd2, 0x28, 0x17, 0x5c, 0x63, 0x39, 0xe5, 0x48,
-	0xa3, 0x23, 0x80, 0x0f, 0x0f, 0xb9, 0x90, 0x5c, 0x8b, 0x2c, 0x2d, 0x0f, 0x6f, 0x28, 0xd1, 0x0a,
-	0x06, 0x6b, 0x94, 0x7b, 0x91, 0xf2, 0xe4, 0xb3, 0x50, 0xda, 0x9c, 0x74, 0x9d, 0x15, 0xa9, 0x2e,
-	0xbf, 0x86, 0x4b, 0xe8, 0x1b, 0x68, 0x19, 0x37, 0xf4, 0xc7, 0xc1, 0xa4, 0x3f, 0x7b, 0x51, 0x33,
-	0x55, 0xbd, 0x15, 0x95, 0x2d, 0x8b, 0x7e, 0x06, 0xf0, 0xe4, 0x91, 0x63, 0x20, 0x8a, 0x1a, 0x22,
-	0x60, 0x65, 0x66, 0x20, 0xf8, 0x56, 0x8b, 0x7b, 0x5c, 0x69, 0xae, 0x0b, 0x65, 0x21, 0xba, 0xec,
-	0x48, 0x33, 0x10, 0x2e, 0xb7, 0x98, 0x81, 0xed, 0x6f, 0x28, 0x74, 0x0a, 0x64, 0xcf, 0x1f, 0xe6,
-	0xae, 0x05, 0x95, 0x32, 0xa8, 0x2d, 0x5b, 0x75, 0xa2, 0xd3, 0x39, 0x0c, 0x15, 0xca, 0x7b, 0xb1,
-	0xad, 0x16, 0x9e, 0x8f, 0xbd, 0xc9, 0xc5, 0xec, 0x65, 0xcd, 0xb4, 0x6a, 0xda, 0xeb, 0xef, 0x39,
-	0xb2, 0xe3, 0x0e, 0xfa, 0x1a, 0x2e, 0x4b, 0xa1, 0xf1, 0x69, 0xdb, 0x76, 0xdf, 0xa9, 0x61, 0x00,
-	0x15, 0x4a, 0xc1, 0x93, 0x2f, 0xc5, 0x7e, 0x83, 0x32, 0xec, 0xb8, 0xbf, 0xd4, 0xd4, 0x6a, 0xc0,
-	0x6b, 0xf3, 0xea, 0xba, 0xee, 0x2f, 0xd5, 0x8a, 0xf3, 0xed, 0x0b, 0xcb, 0x12, 0x0c, 0x7b, 0x95,
-	0x5f, 0x29, 0xf4, 0x1d, 0xf4, 0xb2, 0x1c, 0xcb, 0x4b, 0xc0, 0x02, 0x35, 0x1e, 0xde, 0xd7, 0xca,
-	0xb2, 0x30, 0x75, 0xe5, 0x74, 0x0d, 0x97, 0x27, 0xb0, 0xb4, 0x0f, 0x9d, 0x18, 0x77, 0xbc, 0x48,
-	0x34, 0x39, 0xa3, 0x00, 0x6d, 0x77, 0x06, 0xf1, 0x8c, 0xa1, 0x0a, 0x95, 0x63, 0x1a, 0x13, 0x9f,
-	0x0e, 0xa0, 0x1b, 0x0b, 0xc5, 0x37, 0x09, 0xc6, 0x24, 0x70, 0x3d, 0x09, 0x6a, 0x8c, 0x49, 0x6b,
-	0x3a, 0x87, 0xe1, 0xd1, 0x46, 0x53, 0x7b, 0x93, 0x2e, 0x70, 0x27, 0x52, 0x74, 0x23, 0x45, 0xaa,
-	0x50, 0x6a, 0xe2, 0x99, 0xb8, 0xc8, 0x63, 0xae, 0x91, 0xf8, 0x26, 0x76, 0x33, 0x48, 0xf0, 0x9e,
-	0xfc, 0x3a, 0x8c, 0xbc, 0xdf, 0x87, 0x91, 0xf7, 0xe7, 0x30, 0xf2, 0x7e, 0xfc, 0x1d, 0x9d, 0x6d,
-	0xda, 0x96, 0xe6, 0xed, 0xbf, 0x00, 0x00, 0x00, 0xff, 0xff, 0xcd, 0xf3, 0x94, 0x65, 0xd0, 0x03,
-	0x00, 0x00,
+	// 640 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x84, 0x94, 0x4d, 0x6e, 0xd3, 0x40,
+	0x14, 0xc7, 0x6b, 0x3b, 0x75, 0xe2, 0xd7, 0xa4, 0x4c, 0x47, 0x55, 0x31, 0x45, 0x8a, 0x22, 0x6f,
+	0x88, 0x22, 0xe8, 0x22, 0xc0, 0x82, 0x05, 0x12, 0xa1, 0x41, 0xa2, 0x12, 0x6d, 0x90, 0xd3, 0xb2,
+	0x77, 0xe3, 0x97, 0x32, 0xaa, 0xbf, 0xf0, 0x8c, 0xab, 0x76, 0xc9, 0x2d, 0x58, 0x73, 0x10, 0xd6,
+	0x2c, 0x39, 0x02, 0x0a, 0x17, 0x41, 0x33, 0xb6, 0xb1, 0x9d, 0x20, 0xd8, 0xbd, 0xef, 0xf9, 0xff,
+	0xe6, 0x79, 0x0c, 0xbb, 0x49, 0x1a, 0x8b, 0x38, 0x0b, 0xf9, 0x91, 0x32, 0x68, 0xa7, 0xf4, 0x9d,
+	0xb7, 0x60, 0xba, 0xc8, 0xb3, 0x40, 0x50, 0x02, 0x86, 0x60, 0xbe, 0xad, 0x0d, 0xb4, 0xa1, 0xe1,
+	0x4a, 0x93, 0x52, 0x68, 0x2d, 0x62, 0x1f, 0x6d, 0x5d, 0x85, 0x94, 0x4d, 0x6d, 0x68, 0x87, 0xc8,
+	0xb9, 0x77, 0x85, 0xb6, 0x31, 0xd0, 0x86, 0x96, 0x5b, 0xba, 0xce, 0x29, 0x74, 0x27, 0x8b, 0x05,
+	0x72, 0x5e, 0xcc, 0x7b, 0x04, 0xfa, 0x29, 0xaa, 0x71, 0x3b, 0xe3, 0xfb, 0x47, 0x7f, 0x04, 0xe4,
+	0x35, 0xef, 0xd3, 0x78, 0xc9, 0x02, 0x74, 0xf5, 0x53, 0xa4, 0xfb, 0xb0, 0x7d, 0x1e, 0x5f, 0x63,
+	0xa4, 0xce, 0xb1, 0xdc, 0xdc, 0x71, 0xae, 0xa0, 0xd7, 0x28, 0xa5, 0x07, 0x60, 0x5e, 0x70, 0x4c,
+	0x4f, 0xa6, 0x6a, 0xa6, 0xe5, 0x16, 0x1e, 0xed, 0x03, 0x78, 0x0b, 0xc1, 0x6e, 0x70, 0xea, 0x09,
+	0x2c, 0x66, 0xd4, 0x22, 0x32, 0xff, 0xe6, 0x36, 0x61, 0xa9, 0x27, 0x58, 0x1c, 0x15, 0xa2, 0x6b,
+	0x11, 0x67, 0x0e, 0xdd, 0x73, 0x4c, 0x43, 0x16, 0x79, 0xc1, 0x3b, 0xc6, 0x85, 0x94, 0x73, 0x1c,
+	0x67, 0x91, 0x28, 0x6e, 0x22, 0x77, 0xe8, 0x13, 0x68, 0xc9, 0xac, 0xad, 0x0f, 0x8c, 0xe1, 0xce,
+	0xf8, 0x41, 0xc5, 0x53, 0xf6, 0x96, 0x44, 0xaa, 0xcc, 0xf9, 0x6a, 0xc0, 0xbd, 0xb5, 0x8c, 0x04,
+	0xc8, 0x2a, 0x00, 0xc3, 0x2d, 0x3c, 0xea, 0x40, 0x37, 0x97, 0x3b, 0x17, 0x9e, 0xc8, 0xb8, 0x42,
+	0xe8, 0xb8, 0x8d, 0xd8, 0x1a, 0xa4, 0xa1, 0xfa, 0xeb, 0x90, 0x23, 0x20, 0xa1, 0x77, 0x3b, 0xc9,
+	0x5b, 0x90, 0x73, 0x89, 0xda, 0x52, 0x55, 0x1b, 0x71, 0x3a, 0x81, 0x1e, 0xc7, 0xf4, 0x86, 0x2d,
+	0xca, 0x03, 0xb7, 0x07, 0xda, 0x70, 0x77, 0xfc, 0xb0, 0x62, 0x9a, 0xd7, 0xd3, 0xe7, 0x77, 0x09,
+	0xba, 0xcd, 0x0e, 0xfa, 0x18, 0xf6, 0x8a, 0x40, 0xed, 0x6a, 0x4d, 0x75, 0xde, 0x66, 0x42, 0x02,
+	0x72, 0x4c, 0x99, 0x17, 0x9c, 0x65, 0xe1, 0x25, 0xa6, 0x76, 0x5b, 0xed, 0xa0, 0x11, 0xab, 0x00,
+	0x8f, 0xe5, 0x17, 0xd7, 0xa9, 0x6f, 0x51, 0x46, 0xf2, 0xbc, 0xfa, 0xba, 0xe2, 0x00, 0x6d, 0xab,
+	0xcc, 0x97, 0x11, 0x3a, 0x06, 0x2b, 0x4e, 0xb0, 0x50, 0x02, 0x0a, 0x68, 0xbf, 0x02, 0x3a, 0x8b,
+	0x05, 0x5b, 0xde, 0x29, 0x92, 0xaa, 0xcc, 0xf9, 0xa6, 0x55, 0x4b, 0x72, 0xf1, 0x53, 0x86, 0x5c,
+	0xfc, 0x6b, 0x49, 0x0d, 0x06, 0xfd, 0xbf, 0x0c, 0xc6, 0x06, 0x83, 0x0d, 0x6d, 0x2f, 0xb9, 0x96,
+	0x2a, 0xd4, 0x6e, 0x2c, 0xb7, 0x74, 0xe9, 0xf3, 0xba, 0xfa, 0x7c, 0x1d, 0xb5, 0x27, 0x33, 0x2b,
+	0x53, 0x6b, 0x00, 0xa3, 0x0f, 0xb0, 0xb7, 0xb1, 0x2a, 0xda, 0x03, 0x6b, 0x2e, 0xa6, 0xb8, 0xf4,
+	0xb2, 0x40, 0x90, 0x2d, 0x0a, 0x60, 0xe6, 0x12, 0x88, 0x46, 0x77, 0xa0, 0xcd, 0x33, 0x9e, 0x60,
+	0xe4, 0x13, 0x9d, 0x76, 0xa1, 0xe3, 0x33, 0xee, 0x5d, 0x06, 0xe8, 0x13, 0x43, 0xa6, 0x7c, 0x0c,
+	0x50, 0xa0, 0x4f, 0x5a, 0xa3, 0x57, 0x00, 0xd5, 0x8d, 0xd1, 0x5d, 0xe9, 0x5d, 0x44, 0x53, 0x5c,
+	0xb2, 0x08, 0xf3, 0x89, 0x2c, 0xe2, 0x98, 0x0a, 0xa2, 0x49, 0x3b, 0x4b, 0x7c, 0x4f, 0x20, 0xd1,
+	0xa5, 0x9d, 0x8f, 0x20, 0xc6, 0xe8, 0x05, 0xf4, 0x1a, 0xaa, 0xe5, 0x90, 0x59, 0x52, 0x1b, 0xd2,
+	0x85, 0xce, 0x2c, 0x99, 0x94, 0xc2, 0x00, 0xcc, 0x59, 0x32, 0xc9, 0xc4, 0x47, 0xa2, 0x8f, 0x3f,
+	0x6b, 0x00, 0x17, 0x21, 0x2f, 0xc0, 0xe8, 0x4b, 0x30, 0xf3, 0x32, 0xfa, 0x97, 0x47, 0x57, 0x6c,
+	0xed, 0xf0, 0x60, 0xfd, 0xff, 0x92, 0xff, 0x83, 0x9c, 0x2d, 0xfa, 0x0c, 0xcc, 0x93, 0x30, 0x89,
+	0x53, 0x41, 0x0f, 0x36, 0xdb, 0xe5, 0x53, 0x3d, 0x24, 0x55, 0xbc, 0xec, 0x7a, 0x4d, 0xbe, 0xaf,
+	0xfa, 0xda, 0x8f, 0x55, 0x5f, 0xfb, 0xb9, 0xea, 0x6b, 0x5f, 0x7e, 0xf5, 0xb7, 0x2e, 0x4d, 0x55,
+	0xf4, 0xf4, 0x77, 0x00, 0x00, 0x00, 0xff, 0xff, 0xcb, 0xdb, 0xda, 0x21, 0x4a, 0x05, 0x00, 0x00,
+}
+
+// Reference imports to suppress errors if they are not otherwise used.
+var (
+	_ context.Context
+	_ grpc.ClientConn
+)
+
+// This is a compile-time assertion to ensure that this generated file
+// is compatible with the grpc package it is being compiled against.
+const _ = grpc.SupportPackageIsVersion4
+
+// UmsServiceClient is the client API for UmsService service.
+//
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
+type UmsServiceClient interface {
+	Active(ctx context.Context, in *TerminalRequest, opts ...grpc.CallOption) (*AccessResult, error)
+	Import(ctx context.Context, in *TerminalList, opts ...grpc.CallOption) (*Result, error)
+}
+
+type umsServiceClient struct {
+	cc *grpc.ClientConn
+}
+
+func NewUmsServiceClient(cc *grpc.ClientConn) UmsServiceClient {
+	return &umsServiceClient{cc}
+}
+
+func (c *umsServiceClient) Active(ctx context.Context, in *TerminalRequest, opts ...grpc.CallOption) (*AccessResult, error) {
+	out := new(AccessResult)
+	err := c.cc.Invoke(ctx, "/protoums.UmsService/Active", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *umsServiceClient) Import(ctx context.Context, in *TerminalList, opts ...grpc.CallOption) (*Result, error) {
+	out := new(Result)
+	err := c.cc.Invoke(ctx, "/protoums.UmsService/Import", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// UmsServiceServer is the server API for UmsService service.
+type UmsServiceServer interface {
+	Active(context.Context, *TerminalRequest) (*AccessResult, error)
+	Import(context.Context, *TerminalList) (*Result, error)
+}
+
+// UnimplementedUmsServiceServer can be embedded to have forward compatible implementations.
+type UnimplementedUmsServiceServer struct {
+}
+
+func (*UnimplementedUmsServiceServer) Active(ctx context.Context, req *TerminalRequest) (*AccessResult, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Active not implemented")
+}
+
+func (*UnimplementedUmsServiceServer) Import(ctx context.Context, req *TerminalList) (*Result, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Import not implemented")
+}
+
+func RegisterUmsServiceServer(s *grpc.Server, srv UmsServiceServer) {
+	s.RegisterService(&_UmsService_serviceDesc, srv)
+}
+
+func _UmsService_Active_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(TerminalRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UmsServiceServer).Active(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/protoums.UmsService/Active",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UmsServiceServer).Active(ctx, req.(*TerminalRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _UmsService_Import_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(TerminalList)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UmsServiceServer).Import(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/protoums.UmsService/Import",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UmsServiceServer).Import(ctx, req.(*TerminalList))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+var _UmsService_serviceDesc = grpc.ServiceDesc{
+	ServiceName: "protoums.UmsService",
+	HandlerType: (*UmsServiceServer)(nil),
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "Active",
+			Handler:    _UmsService_Active_Handler,
+		},
+		{
+			MethodName: "Import",
+			Handler:    _UmsService_Import_Handler,
+		},
+	},
+	Streams:  []grpc.StreamDesc{},
+	Metadata: "protoums.proto",
 }
 
 func (m *Result) Marshal() (dAtA []byte, err error) {
@@ -644,10 +889,10 @@ func (m *AccessProfile) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i--
 		dAtA[i] = 0x1a
 	}
-	if len(m.RegisterDate) > 0 {
-		i -= len(m.RegisterDate)
-		copy(dAtA[i:], m.RegisterDate)
-		i = encodeVarintProtoums(dAtA, i, uint64(len(m.RegisterDate)))
+	if len(m.ActiveDate) > 0 {
+		i -= len(m.ActiveDate)
+		copy(dAtA[i:], m.ActiveDate)
+		i = encodeVarintProtoums(dAtA, i, uint64(len(m.ActiveDate)))
 		i--
 		dAtA[i] = 0x12
 	}
@@ -795,6 +1040,64 @@ func (m *TerminalProfile) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
+func (m *TerminalRequest) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *TerminalRequest) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *TerminalRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.XXX_unrecognized != nil {
+		i -= len(m.XXX_unrecognized)
+		copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	if m.Operation != 0 {
+		i = encodeVarintProtoums(dAtA, i, uint64(m.Operation))
+		i--
+		dAtA[i] = 0x28
+	}
+	if len(m.ApkType) > 0 {
+		i -= len(m.ApkType)
+		copy(dAtA[i:], m.ApkType)
+		i = encodeVarintProtoums(dAtA, i, uint64(len(m.ApkType)))
+		i--
+		dAtA[i] = 0x22
+	}
+	if len(m.ActiveCode) > 0 {
+		i -= len(m.ActiveCode)
+		copy(dAtA[i:], m.ActiveCode)
+		i = encodeVarintProtoums(dAtA, i, uint64(len(m.ActiveCode)))
+		i--
+		dAtA[i] = 0x1a
+	}
+	if len(m.SerialNumber) > 0 {
+		i -= len(m.SerialNumber)
+		copy(dAtA[i:], m.SerialNumber)
+		i = encodeVarintProtoums(dAtA, i, uint64(len(m.SerialNumber)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if m.UserID != 0 {
+		i = encodeVarintProtoums(dAtA, i, uint64(m.UserID))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
+}
+
 func encodeVarintProtoums(dAtA []byte, offset int, v uint64) int {
 	offset -= sovProtoums(v)
 	base := offset
@@ -859,7 +1162,7 @@ func (m *AccessProfile) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovProtoums(uint64(l))
 	}
-	l = len(m.RegisterDate)
+	l = len(m.ActiveDate)
 	if l > 0 {
 		n += 1 + l + sovProtoums(uint64(l))
 	}
@@ -927,6 +1230,36 @@ func (m *TerminalProfile) Size() (n int) {
 		n += 1 + l + sovProtoums(uint64(l))
 	}
 	l = len(m.AccessRole)
+	if l > 0 {
+		n += 1 + l + sovProtoums(uint64(l))
+	}
+	if m.Operation != 0 {
+		n += 1 + sovProtoums(uint64(m.Operation))
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *TerminalRequest) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.UserID != 0 {
+		n += 1 + sovProtoums(uint64(m.UserID))
+	}
+	l = len(m.SerialNumber)
+	if l > 0 {
+		n += 1 + l + sovProtoums(uint64(l))
+	}
+	l = len(m.ActiveCode)
+	if l > 0 {
+		n += 1 + l + sovProtoums(uint64(l))
+	}
+	l = len(m.ApkType)
 	if l > 0 {
 		n += 1 + l + sovProtoums(uint64(l))
 	}
@@ -1258,7 +1591,7 @@ func (m *AccessProfile) Unmarshal(dAtA []byte) error {
 			iNdEx = postIndex
 		case 2:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field RegisterDate", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field ActiveDate", wireType)
 			}
 			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
@@ -1286,7 +1619,7 @@ func (m *AccessProfile) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.RegisterDate = string(dAtA[iNdEx:postIndex])
+			m.ActiveDate = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		case 3:
 			if wireType != 2 {
@@ -1695,6 +2028,195 @@ func (m *TerminalProfile) Unmarshal(dAtA []byte) error {
 			m.AccessRole = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		case 10:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Operation", wireType)
+			}
+			m.Operation = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowProtoums
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Operation |= NotifyType(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipProtoums(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthProtoums
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthProtoums
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, dAtA[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+
+func (m *TerminalRequest) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowProtoums
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: TerminalRequest: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: TerminalRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field UserID", wireType)
+			}
+			m.UserID = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowProtoums
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.UserID |= int64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field SerialNumber", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowProtoums
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthProtoums
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthProtoums
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.SerialNumber = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ActiveCode", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowProtoums
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthProtoums
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthProtoums
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ActiveCode = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ApkType", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowProtoums
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthProtoums
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthProtoums
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ApkType = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 5:
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Operation", wireType)
 			}

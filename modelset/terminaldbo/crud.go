@@ -3,7 +3,9 @@ package terminaldbo
 import (
 	"context"
 
+	"github.com/jackc/pgconn"
 	"github.com/jackc/pgtype"
+	"github.com/jackc/pgx/v4"
 
 	"github.com/tsingson/goums/apis/flatums"
 )
@@ -15,9 +17,33 @@ func (s *TerminalDbo) Insert(ctx context.Context, in *flatums.TerminalProfileT) 
 }
 
 // InsertList insert valid terminal
-func (s *TerminalDbo) InsertList(ctx context.Context, serial, activeCode string) (id int64, err error) {
-	err = s.pool.QueryRow(ctx, sqlInsertTerminal, serial, activeCode).Scan(&id)
-	return id, err
+func (s *TerminalDbo) InsertList(ctx context.Context, in *flatums.TerminalListT) (rows int64, err error) {
+	var tx pgx.Tx
+	tx, err = s.pool.Begin(ctx)
+	if err != nil {
+		return 0, err
+	}
+
+	for _, va := range in.List {
+		// serial,trial_code,active_code,filename,apk_type,zone,access_role
+		var re pgconn.CommandTag
+		re, err = tx.Exec(ctx, sqlInsertTerminal, va.SerialNumber, va.ActiveCode)
+		if err != nil {
+			break
+		}
+		rows = rows + re.RowsAffected()
+	}
+	if err != nil {
+		_ = tx.Rollback(ctx)
+		return 0, err
+	}
+
+	err = tx.Commit(ctx)
+	if err != nil {
+		_ = tx.Rollback(ctx)
+		return 0, err
+	}
+	return rows, nil
 }
 
 func (s *TerminalDbo) Update(ctx context.Context, userID int64, activeStatus bool,
@@ -38,7 +64,7 @@ func (s *TerminalDbo) Active(ctx context.Context, serialNumber, activeCode, apkT
 	if err == nil {
 		t.ActiveDate = activeDate.Time.Unix()
 		t.ServiceExpiration = serviceExpiration.Time.Unix()
-		t.Operation = "UPDATE"
+		t.Operation = flatums.NotifyTypeupdate
 	}
 	return t, err
 }

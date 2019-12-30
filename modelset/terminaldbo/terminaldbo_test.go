@@ -63,6 +63,34 @@ func TestTerminalDbo_InsertTerminal(t *testing.T) {
 	}
 }
 
+func TestTerminalDbo_InsertList(t *testing.T) {
+	as := assert.New(t)
+
+	ctx := context.Background()
+	terminalDbo, err := NewTerminalDbo(ctx, cfg, log)
+	as.NoError(err)
+
+	list := []*flatums.TerminalProfileT{
+		&flatums.TerminalProfileT{
+			SerialNumber: vtils.RandString(16),
+			ActiveCode:   vtils.RandString(16),
+		}, &flatums.TerminalProfileT{
+			SerialNumber: vtils.RandString(16),
+			ActiveCode:   vtils.RandString(16),
+		},
+	}
+
+	in := &flatums.TerminalListT{
+		Count: int64(2),
+		List:  list,
+	}
+
+	var rows int64
+	rows, err = terminalDbo.InsertList(ctx, in)
+	as.NoError(err)
+	as.Equal(rows, in.Count)
+}
+
 func TestTerminalDbo_UpdateTerminal(t *testing.T) {
 	ctx := context.Background()
 	terminalDbo, err := NewTerminalDbo(ctx, cfg, log)

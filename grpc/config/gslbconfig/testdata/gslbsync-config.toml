@@ -1,0 +1,26 @@
+Name = "gslbserver"
+Version = "v1.0.1"
+Debug = false
+
+[RPCConfig]
+  Port = ":8099"
+  Host = "127.0.0.1"
+
+[UmsPostgresConfig]
+  User = "postgres"
+  Password = "postgres"
+  Database = "goums"
+  Port = 5432
+  Host = "127.0.0.1"
+  LogLevel = 2
+  PoolConnections = "4"
+  Debug = false
+  [UmsPostgresConfig.RuntimeParams]
+    standard_conforming_strings = "on"
+
+[LiftConfig]
+  AddressList = ["127.0.0.1:9292"]
+  [LiftConfig.TerminalNotify]
+    Subject = "terminal"
+    Name = "terminal"
+

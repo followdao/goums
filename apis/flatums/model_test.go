@@ -14,12 +14,12 @@ func TestTerminalProfileT_Byte(t *testing.T) {
 		ActiveStatus:      false,
 		ActiveDate:        0,
 		MaxActiveSession:  0,
-		ServiceStatus:     0,
+		ServiceStatus:     ServiceStatusTypedefault,
 		ServiceExpiration: 0,
 		SerialNumber:      "aaaa",
 		ActiveCode:        "bbbb",
 		AccessRole:        "tvbox",
-		Operation:         "UPDATE",
+		Operation:         NotifyTypeupdate,
 	}
 	b := va.Byte()
 

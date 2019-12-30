@@ -26,7 +26,7 @@ func ReadList(excelFileName string) (v *flatums.TerminalListT, err error) {
 			if n == 0 {
 				continue
 			}
-			var serial, code , role string
+			var serial, code, role string
 
 			for i, cell := range row.Cells {
 				// i == 0 是序号, 跳过
@@ -49,7 +49,7 @@ func ReadList(excelFileName string) (v *flatums.TerminalListT, err error) {
 			a := &flatums.TerminalProfileT{
 				SerialNumber: serial,
 				ActiveCode:   code,
-				AccessRole:   role ,
+				AccessRole:   role,
 				Operation:    flatums.NotifyTypeinsert,
 			}
 			list = append(list, a)

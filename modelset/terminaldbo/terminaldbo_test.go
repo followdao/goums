@@ -12,6 +12,7 @@ import (
 
 	"github.com/tsingson/logger"
 
+	"github.com/tsingson/goums/apis/flatums"
 	"github.com/tsingson/goums/dbv4/postgresconfig"
 	"github.com/tsingson/goums/pkg/vtils"
 )
@@ -87,27 +88,25 @@ func TestTerminalDbo_UpdateTerminal(t *testing.T) {
 	}
 }
 
-
 func TestTerminalDbo_Active(t *testing.T) {
 	ctx := context.Background()
 	terminalDbo, err := NewTerminalDbo(ctx, cfg, log)
 	assert.NoError(t, err)
 
-    sn:= `aaaaaaaa`
-    code := `12345678`
-    apkType := "test"
+	sn := vtils.RandString(16)
+	co := vtils.RandString(16)
 
-
- var id *terminal
-	id, err = terminalDbo.Active(ctx, sn, code, apkType)
+	var userID int64
+	userID, err = terminalDbo.InsertTerminal(ctx, sn, co)
 	assert.NoError(t, err)
-	if err == nil {
-		fmt.Println("id", id.ID)
-	}
+
+	apkType := "test"
+
+	var id *flatums.TerminalProfileT
+	id, err = terminalDbo.Active(ctx, sn, co, apkType)
+	assert.NoError(t, err)
+	assert.Equal(t, id.UserID, userID)
 }
-
-
-
 
 func TestTerminalDbo_Notify(t *testing.T) {
 	ctx := context.Background()

@@ -2,6 +2,10 @@ package terminaldbo
 
 import (
 	"context"
+
+	"github.com/jackc/pgtype"
+
+	"github.com/tsingson/goums/apis/flatums"
 )
 
 // InsertTerminal insert valid terminal
@@ -19,19 +23,16 @@ func (s *TerminalDbo) UpdateTerminal(ctx context.Context, userID int64, activeSt
 	return re.RowsAffected(), nil
 }
 
-func (s *TerminalDbo) Active(ctx context.Context, activeCode, serialNumber, apkType string) (*terminal, error) {
-	/**
-	  id
-	  , serial_number
-	  , active_status
-	  , active_date
-	  , max_active_session
-	  , access_role
-	  , service_status
-	  , service_expiration
-	*/
-	t := new(terminal)
-	err := s.pool.QueryRow(ctx, sqlActiveTerminal, activeCode, serialNumber, apkType).Scan(&t.ID,
-		&t.serial, &t.active, &t.activeDate, &t.maxActiveSession, &t.accessRole, &t.serviceStatus, &t.serviceExpiration)
+func (s *TerminalDbo) Active(ctx context.Context, serialNumber, activeCode, apkType string) (*flatums.TerminalProfileT, error) {
+	t := new(flatums.TerminalProfileT)
+	var activeDate, serviceExpiration pgtype.Timestamp
+	err := s.pool.QueryRow(ctx, sqlActiveTerminal, activeCode, serialNumber, apkType).Scan(&t.UserID,
+		&t.SerialNumber, &t.ActiveCode, &t.ActiveStatus, &activeDate, &t.MaxActiveSession,
+		&t.AccessRole, &t.ServiceStatus, &serviceExpiration)
+	if err == nil {
+		t.ActiveDate = activeDate.Time.Unix()
+		t.ServiceExpiration = serviceExpiration.Time.Unix()
+		t.Operation = "UPDATE"
+	}
 	return t, err
 }

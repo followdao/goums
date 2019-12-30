@@ -15,6 +15,7 @@ require (
 	github.com/imdario/mergo v0.3.8
 	github.com/jackc/pgtype v1.0.3
 	github.com/jackc/pgx/v4 v4.1.2
+	github.com/sanity-io/litter v1.2.0
 	github.com/spf13/afero v1.2.2
 	github.com/stretchr/testify v1.4.0
 	github.com/tsingson/chardet v0.0.0-20180515175526-60fc302f5592

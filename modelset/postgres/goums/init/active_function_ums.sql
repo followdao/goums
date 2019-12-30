@@ -1,5 +1,5 @@
 
-drop function if exists active(bigint
+drop function if exists active(text
                               ,text
                               ,text
 );

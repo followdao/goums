@@ -1,4 +1,3 @@
-
 drop function if exists active(text
                               ,text
                               ,text

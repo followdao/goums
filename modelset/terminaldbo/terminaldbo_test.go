@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"os"
 	"testing"
-	"time"
 
 	"github.com/jackc/pgx/v4"
 	"github.com/stretchr/testify/assert"
@@ -22,12 +21,9 @@ var (
 	log *logger.ZapLogger
 )
 
-// var conn *pgx.conn
-
 func TestMain(m *testing.M) {
 	// call flag.Parse() here if TestMain uses flags
 	log = logger.New()
-
 	cfg = &postgresconfig.PostgresConfig{
 		User:     "postgres",
 		Database: "goums",
@@ -54,11 +50,13 @@ func TestTerminalDbo_InsertTerminal(t *testing.T) {
 	terminalDbo, err := NewTerminalDbo(ctx, cfg, log)
 	assert.NoError(t, err)
 
-	sn := vtils.RandString(16)
-	co := vtils.RandString(16)
+	in := &flatums.TerminalProfileT{
+		SerialNumber: vtils.RandString(16),
+		ActiveCode:   vtils.RandString(16),
+	}
 
 	var id int64
-	id, err = terminalDbo.InsertTerminal(ctx, sn, co)
+	id, err = terminalDbo.Insert(ctx, in)
 	assert.NoError(t, err)
 	if err == nil {
 		fmt.Println("id ", id)
@@ -69,18 +67,22 @@ func TestTerminalDbo_UpdateTerminal(t *testing.T) {
 	ctx := context.Background()
 	terminalDbo, err := NewTerminalDbo(ctx, cfg, log)
 	assert.NoError(t, err)
-	sn := vtils.RandString(16)
-	co := vtils.RandString(16)
+
+	in := &flatums.TerminalProfileT{
+		SerialNumber: vtils.RandString(16),
+		ActiveCode:   vtils.RandString(16),
+	}
 
 	var id int64
-	id, err = terminalDbo.InsertTerminal(ctx, sn, co)
+	id, err = terminalDbo.Insert(ctx, in)
 	assert.NoError(t, err)
 	if err == nil {
 		fmt.Println("id ", id)
 	}
 
+	in.UserID = id
 	var c int64
-	c, err = terminalDbo.UpdateTerminal(ctx, id, true, 2, 2)
+	c, err = terminalDbo.Update(ctx, id, true, 2, 2)
 
 	assert.NoError(t, err)
 	if err == nil {
@@ -93,39 +95,44 @@ func TestTerminalDbo_Active(t *testing.T) {
 	terminalDbo, err := NewTerminalDbo(ctx, cfg, log)
 	assert.NoError(t, err)
 
-	sn := vtils.RandString(16)
-	co := vtils.RandString(16)
+	in := &flatums.TerminalProfileT{
+		SerialNumber: vtils.RandString(16),
+		ActiveCode:   vtils.RandString(16),
+	}
 
 	var userID int64
-	userID, err = terminalDbo.InsertTerminal(ctx, sn, co)
+	userID, err = terminalDbo.Insert(ctx, in)
 	assert.NoError(t, err)
-
 	apkType := "test"
 
 	var id *flatums.TerminalProfileT
-	id, err = terminalDbo.Active(ctx, sn, co, apkType)
+	id, err = terminalDbo.Active(ctx, in.SerialNumber, in.ActiveCode, apkType)
 	assert.NoError(t, err)
 	assert.Equal(t, id.UserID, userID)
 }
 
+/**
 func TestTerminalDbo_Notify(t *testing.T) {
 	ctx := context.Background()
 	terminalDbo, err := NewTerminalDbo(ctx, cfg, log)
 	assert.NoError(t, err)
-	sn := vtils.RandString(16)
-	co := vtils.RandString(16)
+	in := &flatums.TerminalProfileT {
+		SerialNumber:vtils.RandString(16),
+		ActiveCode:vtils.RandString(16),
+	}
 
-	var id int64
-	id, err = terminalDbo.InsertTerminal(ctx, sn, co)
+	var userID int64
+	userID, err = terminalDbo.Insert(ctx, in )
+
 	assert.NoError(t, err)
 	if err == nil {
-		fmt.Println("id ", id)
+		fmt.Println("id ",  userID)
 	}
 
 	terminalDbo.Notify(ctx)
 
 	var c int64
-	c, err = terminalDbo.UpdateTerminal(ctx, id, true, 2, 2)
+	c, err = terminalDbo.Update(ctx, userID, true, 2, 2)
 
 	assert.NoError(t, err)
 	if err == nil {
@@ -141,3 +148,5 @@ func TestTerminalDbo_UmsNotify(t *testing.T) {
 	assert.NoError(t, err)
 	terminalDbo.UmsNotify(ctx)
 }
+
+*/

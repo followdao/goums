@@ -1,3 +1,6 @@
+drop function if exists notify_trigger(
+) cascade;
+
 create or replace function ums.notify_trigger
 (
 ) returns trigger
@@ -31,5 +34,18 @@ begin
   return rec;
 end;
 $trigger$ language plpgsql;
+-- trigger on ums.terminal
+drop trigger if exists terminal_change_notify on ums.terminal;
 
-
+create trigger terminal_change_notify
+  after update or insert or delete
+  on ums.terminal
+  for each row
+execute procedure ums.notify_trigger();
+-- trigger on ums.apktype table
+drop trigger if exists apk_type_change_notify on ums.apktype;
+create trigger apk_type_change_notify
+  after update or insert or delete
+  on ums.apktype
+  for each row
+execute procedure ums.notify_trigger();

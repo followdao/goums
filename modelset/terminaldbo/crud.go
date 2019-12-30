@@ -8,13 +8,19 @@ import (
 	"github.com/tsingson/goums/apis/flatums"
 )
 
-// InsertTerminal insert valid terminal
-func (s *TerminalDbo) InsertTerminal(ctx context.Context, serial, activeCode string) (id int64, err error) {
+// Insert insert valid terminal
+func (s *TerminalDbo) Insert(ctx context.Context, in *flatums.TerminalProfileT) (id int64, err error) {
+	err = s.pool.QueryRow(ctx, sqlInsertTerminal, in.SerialNumber, in.ActiveCode).Scan(&id)
+	return id, err
+}
+
+// InsertList insert valid terminal
+func (s *TerminalDbo) InsertList(ctx context.Context, serial, activeCode string) (id int64, err error) {
 	err = s.pool.QueryRow(ctx, sqlInsertTerminal, serial, activeCode).Scan(&id)
 	return id, err
 }
 
-func (s *TerminalDbo) UpdateTerminal(ctx context.Context, userID int64, activeStatus bool,
+func (s *TerminalDbo) Update(ctx context.Context, userID int64, activeStatus bool,
 	maxActiveSession int64, serviceStatus int8) (int64, error) {
 	re, err := s.pool.Exec(ctx, sqlUpdateTerminal, activeStatus, maxActiveSession, serviceStatus, userID)
 	if err != nil {

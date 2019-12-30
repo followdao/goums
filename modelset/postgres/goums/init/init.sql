@@ -42,6 +42,9 @@ service_status smallint default 0,
 service_expiration timestamp default (now() + ((31)::double precision * '1 day'::interval))
 );
 
+create unique index terminal_active_code_uindex on ums.terminal(active_code);
+create unique index terminal_serial_number_uindex on ums.terminal(serial_number);
+
 comment on column ums.terminal.service_status is 'service status define:
 0 default
 1 actived

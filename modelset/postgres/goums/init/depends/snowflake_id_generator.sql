@@ -1,4 +1,4 @@
-drop schema if exists goums.queue cascade;
+drop schema if exists queue cascade;
 create schema if not exists queue;
 create sequence queue.global_id_sequence;
 

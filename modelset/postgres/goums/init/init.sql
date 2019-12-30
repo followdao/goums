@@ -1,8 +1,8 @@
 -- create database in pg 11+
 -- drop database if exists goums;
-create database goums;
+-- create database goums;
 -- create schema
-drop schema ums cascade;
+drop schema if exists ums cascade;
 create schema ums;
 
 -- create extension if not exists "uuid-ossp" with schema queue;

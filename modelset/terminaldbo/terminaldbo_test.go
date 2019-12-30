@@ -87,6 +87,28 @@ func TestTerminalDbo_UpdateTerminal(t *testing.T) {
 	}
 }
 
+
+func TestTerminalDbo_Active(t *testing.T) {
+	ctx := context.Background()
+	terminalDbo, err := NewTerminalDbo(ctx, cfg, log)
+	assert.NoError(t, err)
+
+    sn:= `aaaaaaaa`
+    code := `12345678`
+    apkType := "test"
+
+
+ var id *terminal
+	id, err = terminalDbo.Active(ctx, sn, code, apkType)
+	assert.NoError(t, err)
+	if err == nil {
+		fmt.Println("id", id.ID)
+	}
+}
+
+
+
+
 func TestTerminalDbo_Notify(t *testing.T) {
 	ctx := context.Background()
 	terminalDbo, err := NewTerminalDbo(ctx, cfg, log)

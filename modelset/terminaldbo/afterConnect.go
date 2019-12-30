@@ -34,10 +34,12 @@ where
   , service_status
   , service_expiration
 from
-  ums.active($1,$2 , $3)`,
+  ums.active($1,$2,$3)`,
 
 		SqlListenTerminal: `listen terninal_notify`,
 	}
+
+
 
 	for key, value := range prepare {
 		_, err = conn.Prepare(ctx, key, value)

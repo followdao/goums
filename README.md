@@ -311,3 +311,11 @@ and thanks a lot to  [jetbrain](https://www.jetbrains.com) for my favorite Golan
 ## 5. License
 
 MIT
+
+
+
+-----
+
+goums logo design by [tsingson](https://tsingson.github.io), ye, it's me :p
+
+![tsingson-logo](./docs/tsingson-logo.png)

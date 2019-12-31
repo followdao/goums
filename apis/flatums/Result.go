@@ -95,19 +95,15 @@ func (rcv *Result) Message() []byte {
 func ResultStart(builder *flatbuffers.Builder) {
 	builder.StartObject(3)
 }
-
 func ResultAddTid(builder *flatbuffers.Builder, tid int64) {
 	builder.PrependInt64Slot(0, tid, 0)
 }
-
 func ResultAddCode(builder *flatbuffers.Builder, code int64) {
 	builder.PrependInt64Slot(1, code, 0)
 }
-
 func ResultAddMessage(builder *flatbuffers.Builder, message flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(2, flatbuffers.UOffsetT(message), 0)
 }
-
 func ResultEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()
 }

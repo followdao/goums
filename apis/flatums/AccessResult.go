@@ -82,15 +82,12 @@ func (rcv *AccessResult) Token() []byte {
 func AccessResultStart(builder *flatbuffers.Builder) {
 	builder.StartObject(2)
 }
-
 func AccessResultAddMe(builder *flatbuffers.Builder, Me flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(0, flatbuffers.UOffsetT(Me), 0)
 }
-
 func AccessResultAddToken(builder *flatbuffers.Builder, Token flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(1, flatbuffers.UOffsetT(Token), 0)
 }
-
 func AccessResultEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()
 }

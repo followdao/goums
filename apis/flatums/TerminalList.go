@@ -109,19 +109,15 @@ func (rcv *TerminalList) ListLength() int {
 func TerminalListStart(builder *flatbuffers.Builder) {
 	builder.StartObject(2)
 }
-
 func TerminalListAddCount(builder *flatbuffers.Builder, Count int64) {
 	builder.PrependInt64Slot(0, Count, 0)
 }
-
 func TerminalListAddList(builder *flatbuffers.Builder, List flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(1, flatbuffers.UOffsetT(List), 0)
 }
-
 func TerminalListStartListVector(builder *flatbuffers.Builder, numElems int) flatbuffers.UOffsetT {
 	return builder.StartVector(4, numElems, 4)
 }
-
 func TerminalListEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()
 }

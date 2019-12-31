@@ -194,47 +194,36 @@ func (rcv *TerminalProfile) MutateOperation(n NotifyType) bool {
 func TerminalProfileStart(builder *flatbuffers.Builder) {
 	builder.StartObject(10)
 }
-
 func TerminalProfileAddUserID(builder *flatbuffers.Builder, userID int64) {
 	builder.PrependInt64Slot(0, userID, 0)
 }
-
 func TerminalProfileAddActiveStatus(builder *flatbuffers.Builder, activeStatus bool) {
 	builder.PrependBoolSlot(1, activeStatus, false)
 }
-
 func TerminalProfileAddActiveDate(builder *flatbuffers.Builder, activeDate int64) {
 	builder.PrependInt64Slot(2, activeDate, 0)
 }
-
 func TerminalProfileAddMaxActiveSession(builder *flatbuffers.Builder, maxActiveSession int64) {
 	builder.PrependInt64Slot(3, maxActiveSession, 0)
 }
-
 func TerminalProfileAddServiceStatus(builder *flatbuffers.Builder, serviceStatus ServiceStatusType) {
 	builder.PrependInt32Slot(4, int32(serviceStatus), 0)
 }
-
 func TerminalProfileAddServiceExpiration(builder *flatbuffers.Builder, serviceExpiration int64) {
 	builder.PrependInt64Slot(5, serviceExpiration, 0)
 }
-
 func TerminalProfileAddSerialNumber(builder *flatbuffers.Builder, serialNumber flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(6, flatbuffers.UOffsetT(serialNumber), 0)
 }
-
 func TerminalProfileAddActiveCode(builder *flatbuffers.Builder, activeCode flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(7, flatbuffers.UOffsetT(activeCode), 0)
 }
-
 func TerminalProfileAddAccessRole(builder *flatbuffers.Builder, accessRole flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(8, flatbuffers.UOffsetT(accessRole), 0)
 }
-
 func TerminalProfileAddOperation(builder *flatbuffers.Builder, operation NotifyType) {
 	builder.PrependInt32Slot(9, int32(operation), 0)
 }
-
 func TerminalProfileEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()
 }

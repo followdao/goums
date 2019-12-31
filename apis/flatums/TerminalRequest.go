@@ -119,27 +119,21 @@ func (rcv *TerminalRequest) MutateOperation(n OperationType) bool {
 func TerminalRequestStart(builder *flatbuffers.Builder) {
 	builder.StartObject(5)
 }
-
 func TerminalRequestAddUserID(builder *flatbuffers.Builder, userID int64) {
 	builder.PrependInt64Slot(0, userID, 0)
 }
-
 func TerminalRequestAddSerialNumber(builder *flatbuffers.Builder, serialNumber flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(1, flatbuffers.UOffsetT(serialNumber), 0)
 }
-
 func TerminalRequestAddActiveCode(builder *flatbuffers.Builder, activeCode flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(2, flatbuffers.UOffsetT(activeCode), 0)
 }
-
 func TerminalRequestAddApkType(builder *flatbuffers.Builder, apkType flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(3, flatbuffers.UOffsetT(apkType), 0)
 }
-
 func TerminalRequestAddOperation(builder *flatbuffers.Builder, operation OperationType) {
 	builder.PrependInt32Slot(4, int32(operation), 0)
 }
-
 func TerminalRequestEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()
 }

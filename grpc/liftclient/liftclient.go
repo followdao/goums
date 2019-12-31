@@ -99,8 +99,8 @@ func Setup(addr []string, subject string) (lift.Client, error) {
 
 	err = client.CreateStream(
 		context.Background(), subject, subject,
-	//	lift.MaxReplication(),
-	// lift.Partitions(5),
+		//	lift.MaxReplication(),
+		// lift.Partitions(5),
 	)
 	if err != nil {
 		if err != lift.ErrStreamExists {

@@ -1,4 +1,6 @@
-# goums -- a golang based Terminal /Member / User Management Sub-system (UMS) with AAA
+![goums-logo](./docs/goums-logo.png)
+
+# goums -- a golang based TVbox Terminal  User Management Sub-system (UMS) with AAA
 
 
 

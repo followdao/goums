@@ -1,4 +1,4 @@
-package terminaldbo
+package notidy
 
 import (
 	"context"
@@ -11,7 +11,7 @@ import (
 )
 
 // Notify listen
-func (s *TerminalDbo) Notify(ctx context.Context) {
+func (s *NotifyDbo) Notify(ctx context.Context) {
 	conn, err := s.Acquire(ctx)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, "Error acquiring connection:", err)
@@ -48,7 +48,7 @@ func (s *TerminalDbo) Notify(ctx context.Context) {
 }
 
 // Notify listen
-func (s *TerminalDbo) UmsNotify(ctx context.Context) {
+func (s *NotifyDbo) UnifiedNotify(ctx context.Context) {
 	conn, err := s.Acquire(ctx)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, "Error acquiring connection:", err)
@@ -71,6 +71,16 @@ func (s *TerminalDbo) UmsNotify(ctx context.Context) {
 
 		v, er2 := p.Parse(notification.Payload)
 		if er2 == nil {
+			// TODO: parse
+			table := vtils.B2S(v.GetStringBytes("table"))
+			switch table {
+			case "terminal":
+			// TODO:
+			case "apktype":
+			// TODO
+			default:
+
+			}
 			fmt.Println("PID: ", notification.PID,
 				"Channel: ", notification.Channel,
 				"table: ", vtils.B2S(v.GetStringBytes("table")),

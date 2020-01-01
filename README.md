@@ -37,7 +37,15 @@ a general terminal / member management sub-system for TV-box ( android STB )  wi
 
 ![go-ums-all](./docs/go-ums-architecture-2019121.png)
 
-go-ums-interface-201912.png
+update at 2020/01/01
+
+![go-ums-all](./docs/go-ums-architecture-202001.png))
+
+> change:
+> * add proxy 
+> * change scrope of logic component and data-flow 
+
+
 
 ### 2.2 Business process / scenario:
 

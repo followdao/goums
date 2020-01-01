@@ -35,11 +35,12 @@ a general terminal / member management sub-system for TV-box ( android STB )  wi
 
 ### 2.1 architecutre
 
+draft at 2019/12/28 ( DEPRECATED )
 ![go-ums-all](./docs/go-ums-architecture-2019121.png)
 
 update at 2020/01/01
 
-![go-ums-all](./docs/go-ums-architecture-202001.png))
+![go-ums-all](./docs/go-ums-architecture-202001.png)
 
 > change:
 > * add proxy 

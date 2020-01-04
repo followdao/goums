@@ -8,6 +8,8 @@
 
 this project back to active development, and re-design all.
 
+**Work in progress: breaking changes possible.**
+
 Thie project aims for a Minimum Viable Product (MVP) or a prototype of UMS.
 
 

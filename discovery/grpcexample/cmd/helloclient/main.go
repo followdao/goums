@@ -25,30 +25,6 @@ func main() {
 
 	fmt.Println("server: ", srv, "  address: ", addr)
 
-	// r := etcdlb.NewResolver(srv)
-	//
-	// ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
-	// conn, err := grpc.DialContext(ctx, addr,
-	// 	grpc.WithBalancer(grpc.RoundRobin(r)),
-	// 	grpc.WithBlock(), // 客户端将连接到 GPRC 服务, 直到连接成功
-	// 	grpc.WithInsecure(),
-	// 	// grpc.WithCodec(flat.FlatbuffersCodec{}),
-	// 	// grpc.WithDefaultCallOptions(grpc.ForceCodec(flatbuffers.FlatbuffersCodec{})),
-	// 	// client side
-	// 	grpc.WithInitialWindowSize(grpcInitialWindowSize),
-	// 	grpc.WithInitialConnWindowSize(grpcInitialConnWindowSize),
-	// 	grpc.WithDefaultCallOptions(grpc.MaxCallRecvMsgSize(grpcMaxCallMsgSize)),
-	// 	grpc.WithDefaultCallOptions(grpc.MaxCallSendMsgSize(grpcMaxSendMsgSize)),
-	// 	grpc.WithConnectParams(grpc.ConnectParams{MinConnectTimeout: grpcBackoffMaxDelay}),
-	// 	grpc.WithKeepaliveParams(keepalive.ClientParameters{
-	// 		Time:                grpcKeepAliveTime,
-	// 		Timeout:             grpcKeepAliveTimeout,
-	// 		PermitWithoutStream: true,
-	// 	}))
-	// if err != nil {
-	// 	panic(err)
-	// }
-
 	// 连接etcd,得到名命名空间
 	schema, err := etcdv3lb.GenerateAndRegisterEtcdResolver("127.0.0.1:2379", "HelloService")
 	if err != nil {
@@ -61,12 +37,14 @@ func main() {
 		return
 	}
 
-	ticker := time.NewTicker(1 * time.Second)
-	for t := range ticker.C {
-		client := helloworld.NewGreeterClient(conn)
-		resp, err := client.SayHello(context.Background(), &helloworld.HelloRequest{Name: "world " + strconv.Itoa(t.Second())})
+	// ticker := time.NewTicker(time.Duration(500) * time.Millisecond)
+	// for t := range ticker.C {
+	client := helloworld.NewGreeterClient(conn)
+	for {
+		resp, err := client.SayHello(context.Background(), &helloworld.HelloRequest{Name: "world " + strconv.FormatInt(time.Now().Unix(), 10)})
 		if err == nil {
-			fmt.Printf("%v: Reply is %s\n", t, resp.Message)
+			fmt.Printf(" Reply is %s\n", resp.Message)
 		}
 	}
+	// }
 }

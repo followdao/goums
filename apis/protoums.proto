@@ -23,10 +23,11 @@ message AccessProfile {
 
 enum ServiceStatusType {
     StDefault = 0;
-    active = 1;
-    suspend = 2;
-    disabled = 3;
-    deleted = 4;
+    inStock =1;
+    active = 2;
+    suspend = 3;
+    disabled = 4;
+    deleted = 5;
 }
 
 enum NotifyType {

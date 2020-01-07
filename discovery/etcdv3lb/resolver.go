@@ -154,7 +154,7 @@ func (cc *etcdClientConn) UpdateState(state resolver.State) {
 func GenerateAndRegisterEtcdResolver(address string, serviceName string) (schema string, err error) {
 	builder := NewEtcdBuilder(address)
 	target := resolver.Target{Scheme: builder.Scheme(), Endpoint: serviceName}
-	_, err = builder.Build(target, NewEtcdClientConn(), resolver.BuildOption{})
+	_, err = builder.Build(target, NewEtcdClientConn(), resolver.BuildOptions{})
 	if err != nil {
 		return builder.Scheme(), err
 	}

@@ -10,10 +10,10 @@ import (
 
 	"github.com/tsingson/logger"
 
-	"github.com/tsingson/goums/bytecache"
-	"github.com/tsingson/goums/bytecache/fastc"
 	"github.com/tsingson/goums/grpc/aaa/aaaconfig"
-	"github.com/tsingson/goums/grpc/liftclient"
+	"github.com/tsingson/goums/pkg/bytecache"
+	"github.com/tsingson/goums/pkg/bytecache/fastc"
+	"github.com/tsingson/goums/pkg/liftclient"
 )
 
 // StbServer http server struct

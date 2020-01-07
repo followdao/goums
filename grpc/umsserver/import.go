@@ -11,6 +11,8 @@ import (
 	"google.golang.org/grpc/status"
 
 	"github.com/tsingson/goums/apis/flatums"
+
+	"github.com/tsingson/goums/apis/go/goums/terminal"
 )
 
 // Import  login
@@ -26,7 +28,7 @@ func (s *UmsServer) Import(ctx context.Context, in *flatums.TerminalList) (*flat
 	_, err := s.terminalDbo.InsertList(ctx, in.UnPack())
 	if err != nil {
 		log.Error("import error", zap.Error(err))
-		return flatums.ResultBuilder(tid, int64(1), "import error"), err
+		return terminal.ResultBuilder(tid, int64(1), "import error"), err
 	}
-	return flatums.ResultBuilder(tid, int64(0), "import success"), nil
+	return terminal.ResultBuilder(tid, int64(0), "import success"), nil
 }

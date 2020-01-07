@@ -1,0 +1,39 @@
+namespace goums.terminal;
+
+attribute "priority";
+
+enum OperationType : int {
+  UnDefine = 0,
+  active = 1,
+  auth = 2,
+}
+
+///  request from tv box
+table TerminalRequest {
+  userID:long;
+  serialNumber:string;
+  activeCode:string;
+  apkType:string;
+  operation:OperationType;
+}
+
+
+/// Result define sn response
+table Result {
+  tid:long;
+  code:long;
+  message:string;
+}
+
+/// AccessResult  result
+table AccessResult {
+  Me:AccessProfile;
+  Token:string;
+}
+
+/// AccessProfile access
+table AccessProfile {
+  UserID:string;
+  activeDate:string;
+  Expiration:string;
+}

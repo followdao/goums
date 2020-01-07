@@ -11,6 +11,8 @@ import (
 	"google.golang.org/grpc/status"
 
 	"github.com/tsingson/goums/apis/flatums"
+
+	"github.com/tsingson/goums/apis/go/goums/terminal"
 	"github.com/tsingson/goums/grpc/session"
 )
 
@@ -29,7 +31,7 @@ func (s *UmsServer) Active(ctx context.Context, in *flatums.TerminalRequest) (*f
 	re, err := s.terminalDbo.Active(ctx, va.SerialNumber, va.ActiveCode, va.ApkType)
 	if err != nil {
 		log.Error("import error", zap.Error(err))
-		return flatums.ResultBuilder(tid, int64(1), "import error"), err
+		return terminal.ResultBuilder(tid, int64(1), "import error"), err
 	}
 
 	rt := &flatums.AccessResultT{

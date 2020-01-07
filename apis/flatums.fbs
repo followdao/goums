@@ -1,13 +1,16 @@
-namespace flatums;
+include "request.fbs";
 
+namespace goums.terminal;
 attribute "priority";
+
 
 enum ServiceStatusType : int {
   default = 0,
-  active = 1,
-  suspend = 2,
-  disabled = 3,
-  deleted = 4,
+  inStock = 1,
+  active = 2,
+  suspend = 3,
+  disabled = 4,
+  deleted = 5,
 }
 
 enum NotifyType : int {
@@ -17,31 +20,6 @@ enum NotifyType : int {
   delete = 3,
 }
 
-enum OperationType : int {
-  UnDefine = 0,
-  active = 1,
-  auth = 2,
-}
-
-/// Result define sn response
-table Result {
-  tid:long;
-  code:long;
-  message:string;
-}
-
-/// AccessResult  result
-table AccessResult {
-  Me:AccessProfile;
-  Token:string;
-}
-
-/// AccessProfile access
-table AccessProfile {
-  UserID:string;
-  activeDate:string;
-  Expiration:string;
-}
 
 table TerminalList {
   Count:long;
@@ -62,14 +40,7 @@ table TerminalProfile {
   operation:NotifyType;
 }
 
-///  request from tv box
-table TerminalRequest {
-  userID:long;
-  serialNumber:string;
-  activeCode:string;
-  apkType:string;
-  operation:OperationType;
-}
+
 
 /// UmsService backend gRPC service
 rpc_service AaaService {

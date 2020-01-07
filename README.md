@@ -4,13 +4,21 @@
 
 
 
-## 0. Status
+## 0. Status & Press 
 
 this project back to active development, and re-design all.
 
 **Work in progress: breaking changes possible.**
 
 Thie project aims for a Minimum Viable Product (MVP) or a prototype of UMS.
+
+### TODO list 
+- [x] javascript websocket with flatbuffers serialized , done
+- [ ] redesign model and ICD 
+- [ ] rewrite step by step design/development docs ( English and Chinese )
+- [ ] redesign adapter ( interface in go )
+
+
 
 
 ## 1. purpose
@@ -301,6 +309,7 @@ base on golang and high performance go module like
 ### 3.3 web UI
 web admin UI base
 *  [react-admin](https://github.com/marmelab/react-admin)  -- A frontend Framework for building B2B applications running in the browser on top of REST/GraphQL APIs, using ES6, React and Material Design and react
+* [websockets/ws](https://github.com/websockets/ws)  javascript websocket
 
 ### 3.4 THANKS
 Thanks a lot to all open source founder/contriber!!  

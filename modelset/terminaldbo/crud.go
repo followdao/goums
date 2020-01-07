@@ -7,17 +7,17 @@ import (
 	"github.com/jackc/pgtype"
 	"github.com/jackc/pgx/v4"
 
-	"github.com/tsingson/goums/apis/flatums"
+	"github.com/tsingson/goums/apis/go/goums/terminal"
 )
 
 // Insert insert valid terminal
-func (s *TerminalDbo) Insert(ctx context.Context, in *flatums.TerminalProfileT) (id int64, err error) {
+func (s *TerminalDbo) Insert(ctx context.Context, in *terminal.TerminalProfileT) (id int64, err error) {
 	err = s.pool.QueryRow(ctx, sqlInsertTerminal, in.SerialNumber, in.ActiveCode).Scan(&id)
 	return id, err
 }
 
 // InsertList insert valid terminal
-func (s *TerminalDbo) InsertList(ctx context.Context, in *flatums.TerminalListT) (rows int64, err error) {
+func (s *TerminalDbo) InsertList(ctx context.Context, in *terminal.TerminalListT) (rows int64, err error) {
 	var tx pgx.Tx
 	tx, err = s.pool.Begin(ctx)
 	if err != nil {
@@ -55,8 +55,8 @@ func (s *TerminalDbo) Update(ctx context.Context, userID int64, activeStatus boo
 	return re.RowsAffected(), nil
 }
 
-func (s *TerminalDbo) Active(ctx context.Context, serialNumber, activeCode, apkType string) (*flatums.TerminalProfileT, error) {
-	t := new(flatums.TerminalProfileT)
+func (s *TerminalDbo) Active(ctx context.Context, serialNumber, activeCode, apkType string) (*terminal.TerminalProfileT, error) {
+	t := new(terminal.TerminalProfileT)
 	var activeDate, serviceExpiration pgtype.Timestamp
 	err := s.pool.QueryRow(ctx, sqlActiveTerminal, activeCode, serialNumber, apkType).Scan(&t.UserID,
 		&t.SerialNumber, &t.ActiveCode, &t.ActiveStatus, &activeDate, &t.MaxActiveSession,
@@ -64,7 +64,7 @@ func (s *TerminalDbo) Active(ctx context.Context, serialNumber, activeCode, apkT
 	if err == nil {
 		t.ActiveDate = activeDate.Time.Unix()
 		t.ServiceExpiration = serviceExpiration.Time.Unix()
-		t.Operation = flatums.NotifyTypeupdate
+		t.Operation = terminal.NotifyTypeupdate
 	}
 	return t, err
 }

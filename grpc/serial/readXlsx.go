@@ -6,11 +6,11 @@ import (
 
 	"github.com/tealeg/xlsx"
 
-	"github.com/tsingson/goums/apis/flatums"
+	"github.com/tsingson/goums/apis/go/goums/terminal"
 )
 
 // ReadList read terminal sn list from excel file
-func ReadList(excelFileName string) (v *flatums.TerminalListT, err error) {
+func ReadList(excelFileName string) (v *terminal.TerminalListT, err error) {
 	xlFile, er1 := xlsx.OpenFile(excelFileName)
 	if er1 != nil {
 		fmt.Println("文件错误啦")
@@ -18,7 +18,7 @@ func ReadList(excelFileName string) (v *flatums.TerminalListT, err error) {
 	}
 
 	count := 0
-	list := make([]*flatums.TerminalProfileT, 0)
+	list := make([]*terminal.TerminalProfileT, 0)
 
 	//
 	for _, sheet := range xlFile.Sheets {
@@ -46,18 +46,18 @@ func ReadList(excelFileName string) (v *flatums.TerminalListT, err error) {
 			if len(serial) < 8 {
 				continue
 			}
-			a := &flatums.TerminalProfileT{
+			a := &terminal.TerminalProfileT{
 				SerialNumber: serial,
 				ActiveCode:   code,
 				AccessRole:   role,
-				Operation:    flatums.NotifyTypeinsert,
+				Operation:    terminal.NotifyTypeinsert,
 			}
 			list = append(list, a)
 			count++
 		}
 	}
 
-	v = &flatums.TerminalListT{
+	v = &terminal.TerminalListT{
 		Count: int64(count),
 		List:  list,
 	}

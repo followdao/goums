@@ -7,15 +7,12 @@ require (
 	github.com/AlecAivazis/survey/v2 v2.0.5
 	github.com/BurntSushi/toml v0.3.1
 	github.com/RussellLuo/timingwheel v0.0.0-20191211035242-0e67dbf0ae97
-	github.com/VictoriaMetrics/fastcache v1.5.5
 	github.com/coreos/bbolt v1.3.3 // indirect
 	github.com/coreos/etcd v3.3.18+incompatible // indirect
 	github.com/coreos/go-semver v0.3.0 // indirect
 	github.com/coreos/pkg v0.0.0-20180928190104-399ea9e2e55f // indirect
-	github.com/dgraph-io/ristretto v0.0.1
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible // indirect
 	github.com/fasthttp/router v0.5.3
-	github.com/go-redis/redis/v7 v7.0.0-beta.4
 	github.com/gogo/protobuf v1.3.1 // indirect
 	github.com/golang/groupcache v0.0.0-20191227052852-215e87163ea7 // indirect
 	github.com/golang/protobuf v1.3.2
@@ -36,12 +33,12 @@ require (
 	github.com/magiconair/properties v1.8.1
 	github.com/oklog/run v1.0.0
 	github.com/soheilhy/cmux v0.1.4 // indirect
-	github.com/spf13/afero v1.2.2
 	github.com/stretchr/testify v1.4.0
 	github.com/tealeg/xlsx v1.0.5
 	github.com/tmc/grpc-websocket-proxy v0.0.0-20190109142713-0ad062ec5ee5 // indirect
+	github.com/tsingson/bytecache v0.0.0-20200107203018-77dac700e2af
 	github.com/tsingson/chardet v0.0.0-20180515175526-60fc302f5592
-	github.com/tsingson/logger v0.1.1
+	github.com/tsingson/logger v0.2.1
 	github.com/tsingson/multiconfig v0.2.0
 	github.com/valyala/bytebufferpool v1.0.0
 	github.com/valyala/fasthttp v1.7.1

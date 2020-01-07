@@ -14,7 +14,7 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/keepalive"
 
-	"github.com/tsingson/goums/apis/flatums"
+	"github.com/tsingson/goums/apis/go/goums/terminal"
 )
 
 // Serve  grpc server
@@ -46,7 +46,7 @@ func (s *UmsServer) Serve(ctx context.Context) (err error) {
 	)
 
 	// defer server.Close(ctx)
-	flatums.RegisterAaaServiceServer(rpc, s)
+	terminal.RegisterAaaServiceServer(rpc, s)
 
 	ln, er2 := net.Listen("tcp", s.cfg.RPCConfig.Port)
 	if er2 != nil {

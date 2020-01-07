@@ -11,8 +11,7 @@ import (
 
 	"github.com/tsingson/logger"
 
-	"github.com/tsingson/goums/apis/flatums"
-
+	"github.com/tsingson/goums/apis/go/goums/terminal"
 	"github.com/tsingson/goums/dbv4/postgresconfig"
 	"github.com/tsingson/goums/pkg/vtils"
 )
@@ -51,7 +50,7 @@ func TestTerminalDbo_InsertTerminal(t *testing.T) {
 	terminalDbo, err := NewTerminalDbo(ctx, cfg, log)
 	assert.NoError(t, err)
 
-	in := &flatums.TerminalProfileT{
+	in := &terminal.TerminalProfileT{
 		SerialNumber: vtils.RandString(16),
 		ActiveCode:   vtils.RandString(16),
 	}
@@ -71,17 +70,17 @@ func TestTerminalDbo_InsertList(t *testing.T) {
 	terminalDbo, err := NewTerminalDbo(ctx, cfg, log)
 	as.NoError(err)
 
-	list := []*flatums.TerminalProfileT{
-		&flatums.TerminalProfileT{
+	list := []*terminal.TerminalProfileT{
+		&terminal.TerminalProfileT{
 			SerialNumber: vtils.RandString(16),
 			ActiveCode:   vtils.RandString(16),
-		}, &flatums.TerminalProfileT{
+		}, &terminal.TerminalProfileT{
 			SerialNumber: vtils.RandString(16),
 			ActiveCode:   vtils.RandString(16),
 		},
 	}
 
-	in := &flatums.TerminalListT{
+	in := &terminal.TerminalListT{
 		Count: int64(2),
 		List:  list,
 	}
@@ -97,7 +96,7 @@ func TestTerminalDbo_UpdateTerminal(t *testing.T) {
 	terminalDbo, err := NewTerminalDbo(ctx, cfg, log)
 	assert.NoError(t, err)
 
-	in := &flatums.TerminalProfileT{
+	in := &terminal.TerminalProfileT{
 		SerialNumber: vtils.RandString(16),
 		ActiveCode:   vtils.RandString(16),
 	}
@@ -124,7 +123,7 @@ func TestTerminalDbo_Active(t *testing.T) {
 	terminalDbo, err := NewTerminalDbo(ctx, cfg, log)
 	assert.NoError(t, err)
 
-	in := &flatums.TerminalProfileT{
+	in := &terminal.TerminalProfileT{
 		SerialNumber: vtils.RandString(16),
 		ActiveCode:   vtils.RandString(16),
 	}
@@ -134,7 +133,7 @@ func TestTerminalDbo_Active(t *testing.T) {
 	assert.NoError(t, err)
 	apkType := "test"
 
-	var id *flatums.TerminalProfileT
+	var id *terminal.TerminalProfileT
 	id, err = terminalDbo.Active(ctx, in.SerialNumber, in.ActiveCode, apkType)
 	assert.NoError(t, err)
 	assert.Equal(t, id.UserID, userID)

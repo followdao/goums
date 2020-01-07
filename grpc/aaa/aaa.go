@@ -10,9 +10,10 @@ import (
 
 	"github.com/tsingson/logger"
 
+	"github.com/tsingson/bytecache"
+	"github.com/tsingson/bytecache/fastc"
+
 	"github.com/tsingson/goums/grpc/aaa/aaaconfig"
-	"github.com/tsingson/goums/pkg/bytecache"
-	"github.com/tsingson/goums/pkg/bytecache/fastc"
 	"github.com/tsingson/goums/pkg/liftclient"
 )
 

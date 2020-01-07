@@ -13,14 +13,13 @@ import (
 
 	"github.com/tsingson/logger"
 
-	"github.com/tsingson/goums/apis/flatums"
-
+	"github.com/tsingson/goums/apis/go/goums/terminal"
 	"github.com/tsingson/goums/pkg/vtils"
 )
 
 // UmsClient gRPC client
 type UmsClient struct {
-	aaaServiceClient flatums.AaaServiceClient
+	aaaServiceClient terminal.AaaServiceClient
 	Log              *logger.ZapLogger
 	Debug            bool
 }
@@ -57,7 +56,7 @@ func NewAaaClient(ctx context.Context, address string, debug bool,
 	}
 
 	client = &UmsClient{
-		aaaServiceClient: flatums.NewAaaServiceClient(conn),
+		aaaServiceClient: terminal.NewAaaServiceClient(conn),
 		Log:              log,
 		Debug:            debug,
 	}
@@ -66,7 +65,7 @@ func NewAaaClient(ctx context.Context, address string, debug bool,
 }
 
 // Import send a list of terminal to import into server DB
-func (a *UmsClient) Import(ctx context.Context, v *flatums.TerminalListT) error {
+func (a *UmsClient) Import(ctx context.Context, v *terminal.TerminalListT) error {
 	result, err := a.aaaServiceClient.Import(ctx,
 		v.Builder(),
 		grpc.WaitForReady(true))
@@ -80,7 +79,7 @@ func (a *UmsClient) Import(ctx context.Context, v *flatums.TerminalListT) error 
 }
 
 // Active send a terminal to active
-func (a *UmsClient) Active(ctx context.Context, v *flatums.TerminalRequestT) (*flatums.AccessResult, error) {
+func (a *UmsClient) Active(ctx context.Context, v *terminal.TerminalRequestT) (*terminal.AccessResult, error) {
 	result, err := a.aaaServiceClient.Active(ctx,
 		v.Builder(),
 		grpc.WaitForReady(true))

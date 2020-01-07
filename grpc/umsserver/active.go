@@ -10,14 +10,12 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
-	"github.com/tsingson/goums/apis/flatums"
-
 	"github.com/tsingson/goums/apis/go/goums/terminal"
 	"github.com/tsingson/goums/grpc/session"
 )
 
 // Active  login
-func (s *UmsServer) Active(ctx context.Context, in *flatums.TerminalRequest) (*flatbuffers.Builder, error) {
+func (s *UmsServer) Active(ctx context.Context, in *terminal.TerminalRequest) (*flatbuffers.Builder, error) {
 	tid := time.Now().Unix()
 	log := s.log.Named("Import " + strconv.FormatInt(int64(tid), 10))
 
@@ -34,8 +32,8 @@ func (s *UmsServer) Active(ctx context.Context, in *flatums.TerminalRequest) (*f
 		return terminal.ResultBuilder(tid, int64(1), "import error"), err
 	}
 
-	rt := &flatums.AccessResultT{
-		Me: &flatums.AccessProfileT{
+	rt := &terminal.AccessResultT{
+		Me: &terminal.AccessProfileT{
 			UserID:     strconv.FormatInt(re.UserID, 10),
 			ActiveDate: time.Unix(re.ActiveDate, 0).String(),
 			// TODO:  replace session expired time

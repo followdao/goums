@@ -10,13 +10,11 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
-	"github.com/tsingson/goums/apis/flatums"
-
 	"github.com/tsingson/goums/apis/go/goums/terminal"
 )
 
 // Import  login
-func (s *UmsServer) Import(ctx context.Context, in *flatums.TerminalList) (*flatbuffers.Builder, error) {
+func (s *UmsServer) Import(ctx context.Context, in *terminal.TerminalList) (*flatbuffers.Builder, error) {
 	// var names []string
 	tid := time.Now().Unix()
 	log := s.log.Named("Import " + strconv.FormatInt(int64(tid), 10))

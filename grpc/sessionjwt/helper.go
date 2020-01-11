@@ -1,4 +1,4 @@
-package session
+package sessionjwt
 
 import (
 	"github.com/tsingson/goums/pkg/vtils"

@@ -1,0 +1,11 @@
+namespace session;
+
+attribute "priority";
+
+table UserSession {
+	MaxActiveSessions :int64;
+	CAA               :int64;
+	ExpirationTime    :int64;
+	ID                :string;
+	Role              :string;
+}

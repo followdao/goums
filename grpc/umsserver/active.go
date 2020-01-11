@@ -11,7 +11,7 @@ import (
 	"google.golang.org/grpc/status"
 
 	"github.com/tsingson/goums/apis/go/goums/terminal"
-	"github.com/tsingson/goums/grpc/session"
+	"github.com/tsingson/goums/grpc/sessionjwt"
 )
 
 // Active  login
@@ -37,10 +37,10 @@ func (s *UmsServer) Active(ctx context.Context, in *terminal.TerminalRequest) (*
 			UserID:     strconv.FormatInt(re.UserID, 10),
 			ActiveDate: time.Unix(re.ActiveDate, 0).String(),
 			// TODO:  replace session expired time
-			Expiration: session.GenerateExpiration(),
+			Expiration: sessionjwt.GenerateExpiration(),
 		},
 		// TODO:  replace token generator
-		Token: session.GenerateToken(),
+		Token: sessionjwt.GenerateToken(),
 	}
 
 	return rt.Builder(), nil

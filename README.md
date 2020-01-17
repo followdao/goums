@@ -14,6 +14,7 @@ Thie project aims for a Minimum Viable Product (MVP) or a prototype of UMS.
 
 ### TODO list 
 - [x] javascript websocket with flatbuffers serialized , done
+- [ ] android client ( WIP ) 
 - [ ] redesign model and ICD 
 - [ ] rewrite step by step design/development docs ( English and Chinese )
 - [ ] redesign adapter ( interface in go )
